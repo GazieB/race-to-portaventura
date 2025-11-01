@@ -1,5 +1,5 @@
 // =============================
-// Race to PortAventura - server.js (Hold Detection Anti-Cheat)
+// Race to PortAventura - server.js (Anti-Cheat Fixed + Debug + Custom Message)
 // =============================
 const express = require("express");
 const http = require("http");
@@ -9,6 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
+// ✅ Serve static files
 app.use(express.static("public"));
 console.log("📦 Serving static files from:", __dirname + "/public");
 
@@ -16,21 +17,20 @@ console.log("📦 Serving static files from:", __dirname + "/public");
 const MAX_PLAYERS = 10;
 const FINISH_DISTANCE = 1000;
 const START_COUNTDOWN_MS = 3000;
-const HOLD_THRESHOLD_MS = 1200; // Max hold before flagged
-const FREEZE_MS = 1500;
 
 // === Lobby Data ===
 const lobby = {
-  players: new Map(),
+  players: new Map(), // socket.id -> { name, distance, finished, rank, frozen }
   inProgress: false,
   startedAt: null,
   finishedOrder: [],
 };
 
-// === Helper ===
+// === Helper: Get current lobby state ===
 function getLobbyState() {
   return {
     inProgress: lobby.inProgress,
+    startedAt: lobby.startedAt,
     players: Array.from(lobby.players.entries()).map(([id, p]) => ({
       id,
       name: p.name,
@@ -47,13 +47,10 @@ function getLobbyState() {
 // === Reset Race ===
 function resetRace() {
   for (const player of lobby.players.values()) {
-    Object.assign(player, {
-      distance: 0,
-      finished: false,
-      rank: null,
-      frozen: false,
-      holdStart: null,
-    });
+    player.distance = 0;
+    player.finished = false;
+    player.rank = null;
+    player.frozen = false;
   }
   lobby.inProgress = false;
   lobby.startedAt = null;
@@ -64,24 +61,28 @@ function resetRace() {
 
 // === Handle Cheating ===
 function handleCheating(player) {
-  console.log(`🤡 ${player.name} is holding Space too long!`);
-  const message = `${player.name} held Space too long — frozen for 1.5s!`;
+  console.log(`🤡 Cheat detected: ${player.name} is holding Space too long!`);
 
-  io.emit("cheatAlert", { name: player.name, reason: message });
+  const message = `Come on ${player.name}, stop cheating — it's only a game!`;
+
+  // Broadcast message to everyone
+  io.emit("cheatAlert", { name: player.name, message });
+
+  // Freeze cheater temporarily
   player.frozen = true;
   io.emit("state", getLobbyState());
 
   setTimeout(() => {
     player.frozen = false;
     io.emit("state", getLobbyState());
-  }, FREEZE_MS);
+  }, 2000);
 }
 
-// === Socket Events ===
+// === Main Socket Logic ===
 io.on("connection", (socket) => {
   console.log("📶 New connection:", socket.id);
 
-  // --- Join ---
+  // --- Join Lobby ---
   socket.on("join", (name) => {
     if (lobby.players.size >= MAX_PLAYERS) {
       socket.emit("reject", "Lobby full (10 players max).");
@@ -89,13 +90,13 @@ io.on("connection", (socket) => {
     }
 
     name = String(name || "Player").trim().slice(0, 20) || "Player";
+
     lobby.players.set(socket.id, {
       name,
       distance: 0,
       finished: false,
       rank: null,
       frozen: false,
-      holdStart: null,
     });
 
     io.emit("state", getLobbyState());
@@ -106,8 +107,10 @@ io.on("connection", (socket) => {
   socket.on("start", () => {
     if (lobby.inProgress || lobby.players.size === 0) return;
     resetRace();
+
     io.emit("countdown", { ms: START_COUNTDOWN_MS });
     console.log("🚦 Race starting in 3 seconds...");
+
     setTimeout(() => {
       lobby.inProgress = true;
       lobby.startedAt = Date.now();
@@ -116,34 +119,14 @@ io.on("connection", (socket) => {
     }, START_COUNTDOWN_MS);
   });
 
-  // --- Hold Start ---
-  socket.on("holdStart", () => {
-    const player = lobby.players.get(socket.id);
-    if (player && lobby.inProgress && !player.frozen) {
-      player.holdStart = Date.now();
-    }
-  });
-
-  // --- Hold End ---
-  socket.on("holdEnd", () => {
-    const player = lobby.players.get(socket.id);
-    if (!player || !lobby.inProgress || player.frozen || !player.holdStart) return;
-
-    const holdDuration = Date.now() - player.holdStart;
-    player.holdStart = null;
-
-    if (holdDuration >= HOLD_THRESHOLD_MS) {
-      handleCheating(player);
-    }
-  });
-
-  // --- Tap ---
+  // --- Player Tap (move forward) ---
   socket.on("tap", () => {
     const player = lobby.players.get(socket.id);
     if (!player || !lobby.inProgress || player.finished || player.frozen) return;
 
     player.distance += 2;
 
+    // Finish check
     if (player.distance >= FINISH_DISTANCE && !player.finished) {
       player.finished = true;
       lobby.finishedOrder.push({ id: socket.id, name: player.name });
@@ -158,7 +141,19 @@ io.on("connection", (socket) => {
     io.emit("state", getLobbyState());
   });
 
-  // --- Reset ---
+  // --- Cheat Detected (from client) ---
+  socket.on("cheatDetected", () => {
+    const player = lobby.players.get(socket.id);
+    console.log(`📩 cheatDetected received from ${player?.name || "unknown player"}`);
+
+    if (player && !player.frozen && lobby.inProgress) {
+      handleCheating(player);
+    } else {
+      console.log("⚠️ cheatDetected ignored (no player / not inProgress / already frozen)");
+    }
+  });
+
+  // --- Reset Race ---
   socket.on("reset", resetRace);
 
   // --- Disconnect ---
