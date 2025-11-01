@@ -1,5 +1,5 @@
 // =============================
-// Race to PortAventura - client.js (Anti-Cheat Fixed)
+// Race to PortAventura - client.js (Final Synced Anti-Cheat)
 // =============================
 console.log("✅ client.js loaded");
 
@@ -21,6 +21,14 @@ let holdStartTime = null;
 const buzzer = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 buzzer.volume = 0.6;
 
+// === Prevent Spacebar from scrolling the page ===
+window.addEventListener("keydown", (e) => {
+  if (e.code === "Space") e.preventDefault();
+}, { passive: false });
+window.addEventListener("keyup", (e) => {
+  if (e.code === "Space") e.preventDefault();
+}, { passive: false });
+
 // === Join / Start / Reset ===
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim() || "Player";
@@ -32,33 +40,31 @@ resetBtn.addEventListener("click", () => socket.emit("reset"));
 
 // === Spacebar Controls ===
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Space" && raceInProgress) {
-    // Start of hold
-    if (!holdTimer) {
-      holdStartTime = Date.now();
-      socket.emit("holdStart");
+  if (e.code !== "Space" || !raceInProgress) return;
 
-      holdTimer = setTimeout(() => {
-        const holdDuration = Date.now() - holdStartTime;
-        if (holdDuration >= 1200) {
-          console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
-          // You can play the buzzer locally if you like
-          buzzer.currentTime = 0;
-          buzzer.play().catch(() => {});
-        }
-      }, 1200);
-    }
+  // Start of hold
+  if (!holdTimer) {
+    holdStartTime = Date.now();
+    socket.emit("holdStart");
 
-    socket.emit("tap"); // Move forward
+    holdTimer = setTimeout(() => {
+      const holdDuration = Date.now() - holdStartTime;
+      if (holdDuration >= 1200) {
+        console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
+        buzzer.currentTime = 0;
+        buzzer.play().catch(() => {});
+      }
+    }, 1200);
   }
+
+  socket.emit("tap"); // Move forward
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.code === "Space") {
-    clearTimeout(holdTimer);
-    holdTimer = null;
-    socket.emit("holdEnd"); // End of hold (server checks time)
-  }
+  if (e.code !== "Space") return;
+  clearTimeout(holdTimer);
+  holdTimer = null;
+  socket.emit("holdEnd"); // End of hold
 });
 
 // === Countdown ===
@@ -76,12 +82,12 @@ socket.on("countdown", ({ ms }) => {
 });
 
 // === Global Cheat Alert ===
-socket.on("cheatAlert", ({ name, reason }) => {
+socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
 
   const alert = document.createElement("div");
-  alert.textContent = `🚨 ${name} ${reason}`;
+  alert.textContent = `🚨 ${message}`;
   Object.assign(alert.style, {
     position: "fixed",
     bottom: "30px",
