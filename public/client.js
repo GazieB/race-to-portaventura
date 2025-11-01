@@ -1,6 +1,4 @@
-// =============================
-// Race to PortAventura - client.js (Anti-Cheat Fixed)
-// =============================
+
 console.log("✅ client.js loaded");
 
 const socket = io();
@@ -33,23 +31,22 @@ resetBtn.addEventListener("click", () => socket.emit("reset"));
 // === Spacebar Controls ===
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && raceInProgress) {
-    // Start of hold
+    // Notify server when holding starts
     if (!holdTimer) {
       holdStartTime = Date.now();
-      socket.emit("holdStart");
+      socket.emit("holdStart"); // ✅ matches server event
 
+      // Optional: local check for extra feedback
       holdTimer = setTimeout(() => {
         const holdDuration = Date.now() - holdStartTime;
         if (holdDuration >= 1200) {
           console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
-          // You can play the buzzer locally if you like
           buzzer.currentTime = 0;
           buzzer.play().catch(() => {});
         }
       }, 1200);
     }
-
-    socket.emit("tap"); // Move forward
+    socket.emit("tap"); // ✅ send tap event
   }
 });
 
@@ -57,7 +54,7 @@ window.addEventListener("keyup", (e) => {
   if (e.code === "Space") {
     clearTimeout(holdTimer);
     holdTimer = null;
-    socket.emit("holdEnd"); // End of hold (server checks time)
+    socket.emit("holdEnd"); // ✅ matches server event
   }
 });
 
