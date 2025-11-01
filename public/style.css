@@ -105,11 +105,19 @@ button:disabled {
   border-bottom: none;
 }
 
+/* === Plane Styling & Animation === */
+@keyframes planeFloat {
+  0%   { transform: translateY(-50%) translateY(0px) scaleX(-1); }
+  50%  { transform: translateY(-50%) translateY(-10px) scaleX(-1); }
+  100% { transform: translateY(-50%) translateY(0px) scaleX(-1); }
+}
+
 .plane {
   position: absolute;
   width: 100px;
   transform: scaleX(-1);
-  transition: left 0.15s ease-out;
+  transition: left 0.4s linear; /* smooth sideways movement */
+  animation: planeFloat 1.8s ease-in-out infinite; /* gentle up-down motion */
 }
 
 .player-name {
@@ -140,13 +148,8 @@ button:disabled {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.startLabel {
-  left: 20px;
-}
-
-.finishLabel {
-  right: 20px;
-}
+.startLabel { left: 20px; }
+.finishLabel { right: 20px; }
 
 /* === Leaderboard === */
 .sidebar {
@@ -190,26 +193,16 @@ button:disabled {
   box-sizing: border-box;
 }
 
-#factBox {
-  top: 20px;
-}
-
-#airportBox {
-  top: 180px;
-}
-
-#reusBox {
-  top: 340px;
-}
+#factBox { top: 20px; }
+#airportBox { top: 180px; }
+#reusBox { top: 340px; }
 
 #factBox::before {
   content: "🎢 PortAventura Info";
 }
-
 #airportBox::before {
   content: "🛫 Newcastle Airport Info";
 }
-
 #reusBox::before {
   content: "🛬 Reus Airport Info";
 }
@@ -235,13 +228,11 @@ button:disabled {
 }
 
 @keyframes fadeInOut {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0;
     transform: translateY(5px);
   }
-  10%,
-  90% {
+  10%, 90% {
     opacity: 1;
     transform: translateY(0);
   }
