@@ -6,11 +6,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-// ✅ Serve static files
 app.use(express.static("public"));
 console.log("📦 Serving static files from:", __dirname + "/public");
 
-// === Game Settings ===
 const MAX_PLAYERS = 10;
 const FINISH_DISTANCE = 1000;
 const START_COUNTDOWN_MS = 3000;
@@ -40,7 +38,6 @@ function getLobbyState() {
   };
 }
 
-// === Reset Race ===
 function resetRace() {
   for (const player of lobby.players.values()) {
     player.distance = 0;
@@ -63,7 +60,6 @@ function handleCheating(player) {
   // Broadcast message to everyone
   io.emit("cheatAlert", { name: player.name, message });
 
-  // Freeze cheater temporarily
   player.frozen = true;
   io.emit("state", getLobbyState());
 
@@ -161,4 +157,5 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
