@@ -1,4 +1,4 @@
-/* === Base Styling === */
+
 body {
   font-family: "Poppins", sans-serif;
   background: linear-gradient(to bottom, #cbe8ff, #fff9e6);
@@ -21,8 +21,6 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-
-/* === HEADER === */
 header h1 {
   font-size: 2rem;
   color: #e4002b;
@@ -33,7 +31,6 @@ header p {
   color: #555;
 }
 
-/* === CONTROLS === */
 .controls {
   margin: 20px 0;
   display: flex;
@@ -77,7 +74,6 @@ button:disabled {
   margin-left: 15px;
 }
 
-/* === TRACK AREA === */
 .trackArea {
   position: relative;
   display: flex;
@@ -105,15 +101,13 @@ button:disabled {
   border-bottom: none;
 }
 
-/* === Plane Styling (no bobbing, smooth left movement) === */
 .plane {
   position: absolute;
   width: 100px;
   transform: scaleX(-1);
-  transition: left 0.25s ease-out; /* smooth sideways motion only */
+  transition: left 0.25s ease-out; 
 }
 
-/* === Player Name === */
 .player-name {
   position: absolute;
   bottom: 5px;
@@ -124,7 +118,6 @@ button:disabled {
   font-size: 15px;
 }
 
-/* === TRACK LABELS (Newcastle + PortAventura) === */
 .startLabel,
 .finishLabel {
   position: absolute;
@@ -170,7 +163,6 @@ button:disabled {
   margin-bottom: 10px;
 }
 
-/* === INFO BOXES (Fixed Left, Equal Height) === */
 #factBox,
 #airportBox,
 #reusBox {
@@ -248,3 +240,4 @@ button:disabled {
     transform: translateY(0);
   }
 }
+
