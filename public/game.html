@@ -3,45 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Race to PortAventura - Welcome</title>
-  <link rel="stylesheet" href="welcome.css" />
+  <title>✈️ Race from Newcastle to PortAventura</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="/socket.io/socket.io.js"></script>
 </head>
+
 <body>
-  <div class="welcome-container">
-    <h1>🎢 Welcome to Race to PortAventura!</h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
-    <p class="info">
-      Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
-    </p>
-    <button id="startBtn">Start Presentation</button>
-    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
+  <div class="container">
+    <h1>✈️ Race from <span class="highlight">Newcastle Airport</span> to <span class="highlight">PortAventura</span> 📈</h1>
+    <p>Spam the <strong>Space</strong> bar to fly faster! Up to 10 players.</p>
+
+    <div class="controls">
+      <input id="name" placeholder="Enter your name..." />
+      <button id="joinBtn">Join</button>
+      <button id="startBtn">Start Race</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+
+    <div id="countdown" class="countdown"></div>
+
+    <div id="tracks" class="tracks">
+      <div class="track-label left">Newcastle Airport 🛫</div>
+      <div class="track-label right">PortAventura 🎢</div>
+    </div>
+
+    <div class="leaderboard-container">
+      <h2>🏁 Leaderboard</h2>
+      <ul id="leaderboard"></ul>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🎢 PortAventura Info</h3>
+        <p id="factText">Loading PortAventura facts...</p>
+      </div>
+
+      <div class="info-card">
+        <h3>🛫 Newcastle Airport Info</h3>
+        <p id="airportFact">Loading Newcastle Airport facts...</p>
+      </div>
+
+      <div class="info-card">
+        <h3>🛬 Reus Airport Info</h3>
+        <p id="reusFact">Loading Reus Airport facts...</p>
+      </div>
+    </div>
   </div>
 
-  <!-- Plane animation overlay -->
-  <div id="planeOverlay">
-    <img src="plane.png" alt="Plane" id="planeAnim">
-  </div>
-
-  <script>
-    const startBtn = document.getElementById("startBtn");
-    const plane = document.getElementById("planeAnim");
-    const overlay = document.getElementById("planeOverlay");
-
-    startBtn.addEventListener("click", () => {
-      // Start the plane animation
-      overlay.style.display = "block";
-      setTimeout(() => plane.classList.add("fly"), 100);
-
-      // Fade to game after animation
-      setTimeout(() => {
-        overlay.classList.add("fadeOut");
-      }, 4000); // after 4 seconds
-
-      // Redirect to game page
-      setTimeout(() => {
-        window.location.href = "game.html";
-      }, 5000); // total delay before redirect
-    });
-  </script>
+  <script src="client.js"></script>
 </body>
 </html>
