@@ -1,55 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>✈️ Race from Newcastle to PortAventura</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Race from Newcastle Airport to PortAventura</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="/socket.io/socket.io.js"></script>
 </head>
-
 <body>
-  <div class="container">
-    <h1>✈️ Race from <span class="highlight">Newcastle Airport</span> to <span class="highlight">PortAventura</span> 📈</h1>
-    <p>Spam the <strong>Space</strong> bar to fly faster! Up to 10 players.</p>
+  <!-- INFO BOXES -->
+  <aside id="factBox">
+    <p id="factText">Loading PortAventura facts...</p>
+  </aside>
 
-    <div class="controls">
-      <input id="name" placeholder="Enter your name..." />
+  <aside id="airportBox">
+    <p id="airportFact">Loading Newcastle Airport facts...</p>
+  </aside>
+
+  <aside id="reusBox">
+    <p id="reusFact">Loading Reus Airport facts...</p>
+  </aside>
+
+  <!-- MAIN GAME -->
+  <main class="container">
+    <header>
+      <h1>✈️ Race from Newcastle Airport to PortAventura 📈</h1>
+      <p>Spam the <strong>Space</strong> bar to fly faster! Up to 10 players.</p>
+    </header>
+
+    <section class="controls">
+      <input id="name" placeholder="Your name" maxlength="20" />
       <button id="joinBtn">Join</button>
-      <button id="startBtn">Start Race</button>
-      <button id="resetBtn">Reset</button>
-    </div>
+      <button id="startBtn" disabled>Start Race</button>
+      <button id="resetBtn" disabled>Reset</button>
+      <span id="countdown"></span>
+    </section>
 
-    <div id="countdown" class="countdown"></div>
+    <section class="trackArea">
+      <div class="startLabel">Newcastle Airport 🛫</div>
+      <div class="finishLabel">PortAventura 🎢</div>
+      <div id="tracks"></div>
+    </section>
 
-    <div id="tracks" class="tracks">
-      <div class="track-label left">Newcastle Airport 🛫</div>
-      <div class="track-label right">PortAventura 🎢</div>
-    </div>
+    <section class="sidebar">
+      <h3>Leaderboard</h3>
+      <ol id="leaderboard"></ol>
+      <p class="hint">Tip: Keep a steady rhythm. Don’t hold Space — tap it!</p>
+    </section>
+  </main>
 
-    <div class="leaderboard-container">
-      <h2>🏁 Leaderboard</h2>
-      <ul id="leaderboard"></ul>
-    </div>
-
-    <div class="info-grid">
-      <div class="info-card">
-        <h3>🎢 PortAventura Info</h3>
-        <p id="factText">Loading PortAventura facts...</p>
-      </div>
-
-      <div class="info-card">
-        <h3>🛫 Newcastle Airport Info</h3>
-        <p id="airportFact">Loading Newcastle Airport facts...</p>
-      </div>
-
-      <div class="info-card">
-        <h3>🛬 Reus Airport Info</h3>
-        <p id="reusFact">Loading Reus Airport facts...</p>
-      </div>
-    </div>
-  </div>
-
+  <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
 </body>
 </html>
