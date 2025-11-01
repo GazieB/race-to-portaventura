@@ -1,6 +1,3 @@
-// =============================
-// Race to PortAventura - client.js (Anti-Cheat Fixed + Debug + Custom Message)
-// =============================
 console.log("✅ client.js loaded");
 
 const socket = io();
@@ -17,7 +14,6 @@ let raceInProgress = false;
 let holdTimer = null;
 let holdStartTime = null;
 
-// === Cheater Sound ===
 const buzzer = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 buzzer.volume = 0.6;
 
@@ -72,7 +68,6 @@ socket.on("countdown", ({ ms }) => {
   }, 1000);
 });
 
-// === Global Cheat Alert ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
@@ -99,7 +94,6 @@ socket.on("cheatAlert", ({ name, message }) => {
   setTimeout(() => alert.remove(), 3000);
 });
 
-// === Game State Updates ===
 socket.on("state", (state) => {
   raceInProgress = state.inProgress;
   tracks.innerHTML = "";
@@ -152,7 +146,6 @@ socket.on("state", (state) => {
   resetBtn.disabled = state.players.length === 0;
 });
 
-// === Rotating Fact Sections ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
@@ -197,3 +190,4 @@ window.addEventListener("DOMContentLoaded", () => {
   rotateFacts();
   setInterval(rotateFacts, 10000);
 });
+
