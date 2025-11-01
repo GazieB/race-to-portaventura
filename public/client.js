@@ -1,5 +1,5 @@
 // =============================
-// Race to PortAventura - client.js (Final Synced Anti-Cheat)
+// Race to PortAventura - client.js (Hold Detection Anti-Cheat)
 // =============================
 console.log("✅ client.js loaded");
 
@@ -21,14 +21,6 @@ let holdStartTime = null;
 const buzzer = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 buzzer.volume = 0.6;
 
-// === Prevent Spacebar from scrolling the page ===
-window.addEventListener("keydown", (e) => {
-  if (e.code === "Space") e.preventDefault();
-}, { passive: false });
-window.addEventListener("keyup", (e) => {
-  if (e.code === "Space") e.preventDefault();
-}, { passive: false });
-
 // === Join / Start / Reset ===
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim() || "Player";
@@ -40,31 +32,32 @@ resetBtn.addEventListener("click", () => socket.emit("reset"));
 
 // === Spacebar Controls ===
 window.addEventListener("keydown", (e) => {
-  if (e.code !== "Space" || !raceInProgress) return;
+  if (e.code === "Space" && raceInProgress) {
+    // Start of hold
+    if (!holdTimer) {
+      holdStartTime = Date.now();
+      socket.emit("holdStart"); // notify server
 
-  // Start of hold
-  if (!holdTimer) {
-    holdStartTime = Date.now();
-    socket.emit("holdStart");
+      holdTimer = setTimeout(() => {
+        const holdDuration = Date.now() - holdStartTime;
+        if (holdDuration >= 1200) {
+          console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
+          buzzer.currentTime = 0;
+          buzzer.play().catch(() => {});
+        }
+      }, 1200);
+    }
 
-    holdTimer = setTimeout(() => {
-      const holdDuration = Date.now() - holdStartTime;
-      if (holdDuration >= 1200) {
-        console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
-        buzzer.currentTime = 0;
-        buzzer.play().catch(() => {});
-      }
-    }, 1200);
+    socket.emit("tap"); // Move plane
   }
-
-  socket.emit("tap"); // Move forward
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.code !== "Space") return;
-  clearTimeout(holdTimer);
-  holdTimer = null;
-  socket.emit("holdEnd"); // End of hold
+  if (e.code === "Space") {
+    clearTimeout(holdTimer);
+    holdTimer = null;
+    socket.emit("holdEnd"); // notify server
+  }
 });
 
 // === Countdown ===
@@ -81,13 +74,13 @@ socket.on("countdown", ({ ms }) => {
   }, 1000);
 });
 
-// === Global Cheat Alert ===
-socket.on("cheatAlert", ({ name, message }) => {
+// === Cheat Alert from Server ===
+socket.on("cheatAlert", ({ name, reason }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
 
   const alert = document.createElement("div");
-  alert.textContent = `🚨 ${message}`;
+  alert.textContent = `🚨 ${reason}`;
   Object.assign(alert.style, {
     position: "fixed",
     bottom: "30px",
@@ -167,12 +160,11 @@ socket.on("state", (state) => {
     leaderboard.appendChild(li);
   });
 
-  // Button States
   startBtn.disabled = state.inProgress || state.players.length === 0;
   resetBtn.disabled = state.players.length === 0;
 });
 
-// === Rotating Fact Sections ===
+// === Info Boxes (same as before) ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
