@@ -1,5 +1,5 @@
 // =============================
-// Race to PortAventura - client.js (Anti-Cheat Fixed & Synced)
+// Race to PortAventura - client.js (Anti-Cheat Fixed + Debug + Custom Message)
 // =============================
 console.log("✅ client.js loaded");
 
@@ -30,29 +30,29 @@ joinBtn.addEventListener("click", () => {
 startBtn.addEventListener("click", () => socket.emit("start"));
 resetBtn.addEventListener("click", () => socket.emit("reset"));
 
-// === Spacebar Controls ===
+// === Spacebar Controls (with Anti-Cheat) ===
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && raceInProgress) {
-    // Start of hold
     if (!holdTimer) {
       holdStartTime = Date.now();
+      console.log("🟡 Holding space...");
 
       holdTimer = setTimeout(() => {
         const holdDuration = Date.now() - holdStartTime;
         if (holdDuration >= 1200) {
-          console.log("⚠️ Cheat detected (holding space too long)");
+          console.log("🚨 Cheat detected — sending to server!");
           socket.emit("cheatDetected");
         }
       }, 1200);
     }
 
-    // Send tap
     socket.emit("tap");
   }
 });
 
 window.addEventListener("keyup", (e) => {
   if (e.code === "Space") {
+    console.log("🟢 Released space.");
     clearTimeout(holdTimer);
     holdTimer = null;
   }
@@ -73,12 +73,12 @@ socket.on("countdown", ({ ms }) => {
 });
 
 // === Global Cheat Alert ===
-socket.on("cheatAlert", ({ message }) => {
+socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
 
   const alert = document.createElement("div");
-  alert.textContent = "🚨 " + message;
+  alert.textContent = `🚨 ${message}`;
   Object.assign(alert.style, {
     position: "fixed",
     bottom: "30px",
@@ -143,8 +143,8 @@ socket.on("state", (state) => {
     if (idx === 0) li.style.background = "linear-gradient(90deg, #ffd700, #fff4b3)";
     else if (idx === 1) li.style.background = "linear-gradient(90deg, #c0c0c0, #f0f0f0)";
     else if (idx === 2) li.style.background = "linear-gradient(90deg, #cd7f32, #ffddb0)";
-
     li.style.fontWeight = "bold";
+
     leaderboard.appendChild(li);
   });
 
@@ -152,4 +152,48 @@ socket.on("state", (state) => {
   resetBtn.disabled = state.players.length === 0;
 });
 
+// === Rotating Fact Sections ===
+const portaventuraFacts = [
+  "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
+  "🏨 Hotel guests get **free park access** during their stay.",
+  "🚆 Only 10 minutes from **Salou** and 1 hour from **Barcelona**.",
+  "🎟️ Includes **Ferrari Land** and **Caribe Aquatic Park**.",
+  "🍴 Over **50 restaurants** and snack spots in the resort.",
+  "🌙 Night shows, fireworks, and character parades every evening."
+];
 
+const airportFacts = [
+  "🛫 Newcastle Airport serves **over 5 million passengers** per year.",
+  "🍔 Great dining with **Greggs, Burger King, Cabin Bar**, and more.",
+  "💺 The airport provides **special assistance** and priority lanes.",
+  "🛍️ Duty-free includes **World Duty Free** and **JD Sports**.",
+  "🚖 Around 15 minutes from **Newcastle city centre**.",
+  "🧳 Offers lounges, car rentals, and on-site parking."
+];
+
+const reusFacts = [
+  "🛬 Airlines like **Jet2, Ryanair, and TUI** operate direct seasonal flights.",
+  "🌍 Handles **over 1 million passengers** annually.",
+  "🧳 Features **wheelchair access**, accessible toilets, and assistance staff.",
+  "🚗 Car hire available with **Avis, Hertz, Europcar, and Goldcar**.",
+  "🚌 Shuttle buses to **Salou, Tarragona, and PortAventura** every 30 mins.",
+  "☕ Cafés, duty-free, and family facilities available."
+];
+
+function rotateFacts() {
+  const factText = document.getElementById("factText");
+  const airportFact = document.getElementById("airportFact");
+  const reusFact = document.getElementById("reusFact");
+
+  if (!factText || !airportFact || !reusFact) return;
+
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  factText.innerHTML = pick(portaventuraFacts);
+  airportFact.innerHTML = pick(airportFacts);
+  reusFact.innerHTML = pick(reusFacts);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  rotateFacts();
+  setInterval(rotateFacts, 10000);
+});
