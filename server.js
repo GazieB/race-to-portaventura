@@ -1,6 +1,3 @@
-// =============================
-// Race to PortAventura - server.js (Anti-Cheat Fixed + Debug + Custom Message)
-// =============================
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -18,15 +15,14 @@ const MAX_PLAYERS = 10;
 const FINISH_DISTANCE = 1000;
 const START_COUNTDOWN_MS = 3000;
 
-// === Lobby Data ===
+
 const lobby = {
-  players: new Map(), // socket.id -> { name, distance, finished, rank, frozen }
+  players: new Map(), 
   inProgress: false,
   startedAt: null,
   finishedOrder: [],
 };
 
-// === Helper: Get current lobby state ===
 function getLobbyState() {
   return {
     inProgress: lobby.inProgress,
@@ -59,7 +55,6 @@ function resetRace() {
   console.log("🏁 Race reset!");
 }
 
-// === Handle Cheating ===
 function handleCheating(player) {
   console.log(`🤡 Cheat detected: ${player.name} is holding Space too long!`);
 
@@ -78,7 +73,6 @@ function handleCheating(player) {
   }, 2000);
 }
 
-// === Main Socket Logic ===
 io.on("connection", (socket) => {
   console.log("📶 New connection:", socket.id);
 
@@ -119,14 +113,12 @@ io.on("connection", (socket) => {
     }, START_COUNTDOWN_MS);
   });
 
-  // --- Player Tap (move forward) ---
   socket.on("tap", () => {
     const player = lobby.players.get(socket.id);
     if (!player || !lobby.inProgress || player.finished || player.frozen) return;
 
     player.distance += 2;
-
-    // Finish check
+    
     if (player.distance >= FINISH_DISTANCE && !player.finished) {
       player.finished = true;
       lobby.finishedOrder.push({ id: socket.id, name: player.name });
@@ -141,7 +133,6 @@ io.on("connection", (socket) => {
     io.emit("state", getLobbyState());
   });
 
-  // --- Cheat Detected (from client) ---
   socket.on("cheatDetected", () => {
     const player = lobby.players.get(socket.id);
     console.log(`📩 cheatDetected received from ${player?.name || "unknown player"}`);
@@ -153,10 +144,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  // --- Reset Race ---
   socket.on("reset", resetRace);
 
-  // --- Disconnect ---
+ 
   socket.on("disconnect", () => {
     const player = lobby.players.get(socket.id);
     if (player) {
@@ -167,9 +157,8 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-// === Start Server ===
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
