@@ -1,5 +1,5 @@
 // =============================
-// Race to PortAventura - client.js (Leaderboard fixed)
+// Race to PortAventura - client.js (Anti-Cheat Fixed)
 // =============================
 console.log("✅ client.js loaded");
 
@@ -33,16 +33,23 @@ resetBtn.addEventListener("click", () => socket.emit("reset"));
 // === Spacebar Controls ===
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && raceInProgress) {
+    // Start of hold
     if (!holdTimer) {
       holdStartTime = Date.now();
+      socket.emit("holdStart");
+
       holdTimer = setTimeout(() => {
         const holdDuration = Date.now() - holdStartTime;
         if (holdDuration >= 1200) {
-          socket.emit("cheatDetected");
+          console.log(`⚠️ Long hold detected: ${holdDuration}ms`);
+          // You can play the buzzer locally if you like
+          buzzer.currentTime = 0;
+          buzzer.play().catch(() => {});
         }
       }, 1200);
     }
-    socket.emit("tap");
+
+    socket.emit("tap"); // Move forward
   }
 });
 
@@ -50,6 +57,7 @@ window.addEventListener("keyup", (e) => {
   if (e.code === "Space") {
     clearTimeout(holdTimer);
     holdTimer = null;
+    socket.emit("holdEnd"); // End of hold (server checks time)
   }
 });
 
@@ -68,12 +76,12 @@ socket.on("countdown", ({ ms }) => {
 });
 
 // === Global Cheat Alert ===
-socket.on("cheatAlert", ({ name, message }) => {
+socket.on("cheatAlert", ({ name, reason }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
 
   const alert = document.createElement("div");
-  alert.textContent = `🚨 ${message}`;
+  alert.textContent = `🚨 ${name} ${reason}`;
   Object.assign(alert.style, {
     position: "fixed",
     bottom: "30px",
@@ -100,10 +108,10 @@ socket.on("state", (state) => {
   tracks.innerHTML = "";
   leaderboard.innerHTML = "";
 
-  // === Sort leaderboard by distance (furthest first)
+  // Sort leaderboard by distance
   const sortedPlayers = [...state.players].sort((a, b) => b.distance - a.distance);
 
-  // === Build Track (order by join order)
+  // Build Track
   state.players.forEach((p) => {
     const lane = document.createElement("div");
     lane.className = "lane";
@@ -130,7 +138,7 @@ socket.on("state", (state) => {
     tracks.appendChild(lane);
   });
 
-  // === Build Leaderboard (sorted)
+  // Build Leaderboard
   sortedPlayers.forEach((p, idx) => {
     const li = document.createElement("li");
     const pct = Math.min(100, Math.round((p.distance / state.finishDistance) * 100));
@@ -138,7 +146,7 @@ socket.on("state", (state) => {
       ? `#${p.rank || idx + 1} ${p.name} – Finished`
       : `${p.name} – ${pct}%`;
 
-    // === Highlight top 3
+    // Highlight top 3
     if (idx === 0) {
       li.style.background = "linear-gradient(90deg, #ffd700, #fff4b3)";
       li.style.fontWeight = "bold";
@@ -153,11 +161,10 @@ socket.on("state", (state) => {
     leaderboard.appendChild(li);
   });
 
-  // === Button States ===
+  // Button States
   startBtn.disabled = state.inProgress || state.players.length === 0;
   resetBtn.disabled = state.players.length === 0;
 });
-
 
 // === Rotating Fact Sections ===
 const portaventuraFacts = [
