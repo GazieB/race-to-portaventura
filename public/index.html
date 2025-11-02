@@ -23,25 +23,34 @@
   </div>
 
   <script>
-    const startBtn = document.getElementById("startBtn");
-    const plane = document.getElementById("planeAnim");
-    const overlay = document.getElementById("planeOverlay");
+  const startBtn = document.getElementById("startBtn");
+  const plane = document.getElementById("planeAnim");
+  const overlay = document.getElementById("planeOverlay");
+  const container = document.querySelector(".welcome-container");
 
-    startBtn.addEventListener("click", () => {
-      // Start the plane animation
-      overlay.style.display = "block";
-      setTimeout(() => plane.classList.add("fly"), 100);
+  startBtn.addEventListener("click", () => {
+    // Disable the button immediately to prevent double-click
+    startBtn.disabled = true;
 
-      // Fade to game after animation
-      setTimeout(() => {
-        overlay.classList.add("fadeOut");
-      }, 4000); // after 4 seconds
+    // Fade out the welcome content
+    container.classList.add("fadeOut");
 
-      // Redirect to game page
-      setTimeout(() => {
-        window.location.href = "game.html";
-      }, 5000); // total delay before redirect
-    });
-  </script>
+    // Start plane animation
+    overlay.style.display = "block";
+    setTimeout(() => plane.classList.add("fly"), 100);
+
+    // Fade entire screen to white as plane finishes
+    setTimeout(() => {
+      overlay.classList.add("fadeToWhite");
+    }, 3500);
+
+    // Redirect after the fade is complete
+    setTimeout(() => {
+      window.location.href = "game.html";
+    }, 4500);
+  });
+</script>
+
 </body>
 </html>
+
