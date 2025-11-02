@@ -172,3 +172,76 @@ footer {
   from { transform: rotate(2deg); }
   to   { transform: rotate(-2deg); }
 }
+/* === INFO BOXES (Bottom Row Layout) === */
+#factBox, #airportBox, #reusBox {
+  position: fixed;
+  bottom: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #d32f2f;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 16px 20px;
+  width: 28%;
+  font-family: "Poppins", sans-serif;
+  color: #222;
+  z-index: 1000;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  animation: fadeIn 1s ease-in;
+}
+
+/* === Position Each Box === */
+#factBox {
+  left: 3%;
+}
+
+#airportBox {
+  left: 36%;
+}
+
+#reusBox {
+  right: 3%;
+}
+
+/* === Title Labels Above Each Box === */
+#factBox::before,
+#airportBox::before,
+#reusBox::before {
+  display: block;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #d00;
+  margin-bottom: 6px;
+}
+
+#factBox::before {
+  content: "🎢 PortAventura Info";
+}
+
+#airportBox::before {
+  content: "🛫 Newcastle Airport Info";
+}
+
+#reusBox::before {
+  content: "🛬 Reus Airport Info";
+}
+
+/* === Smooth Fade Animation for Fact Text === */
+#factText,
+#airportFact,
+#reusFact {
+  animation: fadeInOut 10s infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
