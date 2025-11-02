@@ -1,73 +1,77 @@
-/* === General Styling === */
+/* === Base Style === */
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to bottom right, #dff1ff, #f7f9ef);
+  background: linear-gradient(to bottom right, #d7ecff, #f8f9f4);
   color: #333;
   overflow: hidden;
-}
-
-.welcome-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
   height: 100vh;
-  gap: 15px;
-  z-index: 2;
-  position: relative;
 }
 
-h1 {
+/* === Main Card === */
+.main-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 50px 80px;
+  text-align: center;
+  max-width: 700px;
+  z-index: 2;
+  position: relative;
+  border: 3px solid #e4002b;
+}
+
+.main-card h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.main-card h1 span {
   color: #e4002b;
-  font-size: 2.2rem;
-  margin-bottom: 0;
 }
 
 .subtitle {
-  color: #333;
   font-size: 1rem;
-  margin-top: 5px;
+  color: #444;
 }
 
 .info {
-  color: #444;
+  color: #555;
   font-size: 0.95rem;
-  max-width: 500px;
+  margin: 10px 0 25px 0;
 }
 
 button {
-  background-color: #e4002b;
-  color: white;
+  background: #e4002b;
   border: none;
-  padding: 12px 30px;
-  border-radius: 8px;
+  padding: 12px 40px;
+  color: white;
   font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
-
 button:hover {
-  background-color: #c00023;
+  background: #c00023;
 }
 
 footer {
-  margin-top: 20px;
-  font-size: 0.8rem;
-  color: #555;
+  margin-top: 25px;
+  font-size: 0.85rem;
+  color: #666;
 }
 
-/* === Plane Overlay === */
+/* === Plane Animation Overlay === */
 #planeOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: none;
   pointer-events: none;
-  z-index: 5;
+  z-index: 10;
   background: transparent;
   overflow: hidden;
 }
@@ -75,50 +79,46 @@ footer {
 /* === Plane and Banner === */
 #planeAnim {
   position: absolute;
-  bottom: 50%;
+  bottom: 45%;
   transform: translateY(50%);
   display: flex;
   align-items: center;
   gap: 10px;
-  left: -600px;
+  left: -900px;
 }
 
 .planeImage {
-  width: 220px;
+  width: 240px;
   height: auto;
-  transform: scaleX(1); /* face right */
+  transform: scaleX(1); /* ✅ Plane faces RIGHT now */
 }
 
-/* === Banner === */
 .banner {
   background: #e4002b;
   color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  padding: 25px 60px;
-  border-radius: 0 10px 10px 0;
-  box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.25);
-  transform: skew(-3deg);
-  margin-left: -15px;
+  font-weight: 600;
+  font-size: 1.8rem;
+  padding: 25px 70px;
+  border-radius: 10px 0 0 10px;
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.25);
+  transform: skew(2deg);
+  margin-right: -25px;
   animation: bannerWave 1.2s ease-in-out infinite alternate;
-  transform-origin: left center;
+  transform-origin: right center;
 }
 
 /* === Animation === */
 .fly {
-  animation: planeFly 8s ease-in-out forwards;
+  animation: planeFly 10s ease-in-out forwards;
 }
 
 @keyframes planeFly {
   0% {
-    left: -700px;
+    left: -900px;
     opacity: 0;
   }
   10% {
     opacity: 1;
-  }
-  50% {
-    transform: translateY(50%) rotate(0deg);
   }
   100% {
     left: 120%;
@@ -126,35 +126,20 @@ footer {
   }
 }
 
-/* Banner movement */
 @keyframes bannerWave {
-  0% {
-    transform: skew(-3deg) rotate(0deg);
-  }
-  25% {
-    transform: skew(-2deg) rotate(1deg);
-  }
-  50% {
-    transform: skew(-4deg) rotate(-1deg);
-  }
-  75% {
-    transform: skew(-3deg) rotate(0.5deg);
-  }
-  100% {
-    transform: skew(-3deg) rotate(-0.5deg);
-  }
+  0% { transform: skew(2deg) rotate(0deg); }
+  25% { transform: skew(3deg) rotate(1deg); }
+  50% { transform: skew(2deg) rotate(-1deg); }
+  75% { transform: skew(3deg) rotate(0.5deg); }
+  100% { transform: skew(2deg) rotate(-0.5deg); }
 }
 
 /* === Fade Transition === */
 .fadeToWhite {
-  animation: fadeToWhiteAnim 1.5s ease forwards;
+  animation: fadeToWhiteAnim 2s ease forwards;
 }
 
 @keyframes fadeToWhiteAnim {
-  from {
-    background: transparent;
-  }
-  to {
-    background: white;
-  }
+  from { background: transparent; }
+  to { background: white; }
 }
