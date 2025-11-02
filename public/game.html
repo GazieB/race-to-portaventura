@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Race to PortAventura</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Fade-in transition -->
-  <style>
-    body {
-      opacity: 0;
-      transition: opacity 2.5s ease-in-out;
-    }
-    body.fadeIn {
-      opacity: 1;
-    }
-  </style>
+  <link rel="stylesheet" href="game.css" />
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Race to PortAventura 🏁</h1>
-      <p>✈️Welcome to the ultimate Jet2 Holidays race experience!✈️</p>
-      <p>✈️Presentation By Gareth Bennett | ✈️ Designed By Assisted Travel For Assisted Travel ✈️</p>
+      <p>Tap <strong>Space</strong> to race! Avoid cheating — we’re watching 👀</p>
     </header>
 
-<div id="commentaryBox">🎙️ Welcome to the Race to PortAventura!</div>
-
     <div class="controls">
-      <input type="text" id="name" placeholder="Enter your name" />
+      <input id="name" type="text" placeholder="Enter your name" />
       <button id="joinBtn">Join</button>
       <button id="startBtn">Start Race</button>
-      <button id="resetBtn">Reset</button>
+      <button id="resetBtn">Reset Race</button>
       <span id="countdown"></span>
     </div>
 
-    <div id="tracks" class="trackArea"></div>
+    <div class="trackArea" id="tracks">
+      <div class="startLabel">🛫 Newcastle</div>
+      <div class="finishLabel">🎢 PortAventura</div>
+    </div>
 
+    <aside class="sidebar">
+      <h3>🏆 Leaderboard</h3>
+      <ul id="leaderboard"></ul>
+    </aside>
+
+    <!-- Info Boxes -->
     <aside id="factBox">
       <p id="factText">Loading PortAventura facts...</p>
     </aside>
@@ -49,21 +44,11 @@
       <p id="reusFact">Loading Reus Airport facts...</p>
     </aside>
 
-    <div class="sidebar">
-      <h3>Leaderboard</h3>
-      <ul id="leaderboard"></ul>
-    </div>
+    <!-- 🎙️ Commentary Box -->
+    <div id="commentaryBox">🎙️ Welcome to the Race to PortAventura!</div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
-  <script>
-    // Fade in the game page when it loads
-    window.addEventListener("load", () => {
-      document.body.classList.add("fadeIn");
-    });
-  </script>
 </body>
 </html>
-
-
