@@ -7,30 +7,33 @@
   <link rel="stylesheet" href="welcome.css" />
 </head>
 <body>
+  <!-- === Welcome Container === -->
   <div class="welcome-container">
     <h1>🎢 Welcome to Race to PortAventura!</h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>GazieB</strong></p>
+    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
     <p class="info">
       Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
     </p>
     <button id="startBtn">Start Presentation</button>
-    <footer>✈️ Desgined By Assisted Travel For Assisted Travel ✈️ | 🏆 Team KB For The Win 🏆</footer>
+    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
-  <!-- ✅ Info Boxes -->
-  <aside id="factBox">
-    <p id="factText">Loading PortAventura facts...</p>
-  </aside>
+  <!-- === Info Boxes (Bottom Row) === -->
+  <div class="info-row">
+    <aside id="factBox">
+      <p id="factText">Loading PortAventura facts...</p>
+    </aside>
 
-  <aside id="airportBox">
-    <p id="airportFact">Loading Newcastle Airport facts...</p>
-  </aside>
+    <aside id="airportBox">
+      <p id="airportFact">Loading Newcastle Airport facts...</p>
+    </aside>
 
-  <aside id="reusBox">
-    <p id="reusFact">Loading Reus Airport facts...</p>
-  </aside>
+    <aside id="reusBox">
+      <p id="reusFact">Loading Reus Airport facts...</p>
+    </aside>
+  </div>
 
-  <!-- ✈️ Plane animation overlay -->
+  <!-- === Plane Animation Overlay === -->
   <div id="planeOverlay">
     <div id="planeAnim">
       <img src="plane.png" alt="Plane" class="planeImage" />
@@ -38,22 +41,38 @@
     </div>
   </div>
 
-  <!-- 🚀 Animation Logic -->
+  <!-- === Animation + Fact Script === -->
   <script>
     const startBtn = document.getElementById("startBtn");
     const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
+    const infoRow = document.querySelector(".info-row");
 
     startBtn.addEventListener("click", () => {
+      // Fade out the welcome box
       document.querySelector(".welcome-container").classList.add("fadeOut");
-      overlay.style.display = "block";
 
+      // Keep info boxes visible during the plane animation
+      infoRow.style.transition = "opacity 1s ease";
+      infoRow.style.opacity = "1";
+
+      // Show overlay + start plane animation
+      overlay.style.display = "block";
       setTimeout(() => plane.classList.add("fly"), 100);
-      setTimeout(() => overlay.classList.add("fadeToWhite"), 6500);
-      setTimeout(() => window.location.href = "game.html", 8000);
+
+      // Fade out info boxes and overlay at the end
+      setTimeout(() => {
+        infoRow.style.opacity = "0";
+        overlay.classList.add("fadeToWhite");
+      }, 6500);
+
+      // Redirect to game page
+      setTimeout(() => {
+        window.location.href = "game.html";
+      }, 8000);
     });
 
-    // ✅ Random rotating facts (same as game)
+    // === Facts Arrays ===
     const portaventuraFacts = [
       "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
       "🏨 Hotel guests get **free park access** during their stay.",
@@ -81,6 +100,7 @@
       "☕ Cafés, duty-free, and family facilities available."
     ];
 
+    // === Rotate Facts Every 10 Seconds ===
     function rotateFacts() {
       const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
       document.getElementById("factText").innerHTML = pick(portaventuraFacts);
