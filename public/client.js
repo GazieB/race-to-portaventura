@@ -132,9 +132,15 @@ socket.on("state", (state) => {
     commentaryInterval = null;
   }
 
+  // === Winner + Closing Messages ===
   if (state.finishedOrder && state.finishedOrder.length > 0) {
     const winner = state.finishedOrder[0].name;
     showCommentary(`🏆 ${winner} has landed first at PortAventura!`, "gold");
+
+    // Delayed outro messages
+    setTimeout(() => showCommentary("🎉 Thank you for taking part in the race!", "gold"), 5000);
+    setTimeout(() => showCommentary("🎧 Thank you for listening!", "blue"), 9000);
+    setTimeout(() => showCommentary("🎢 I hope you enjoyed the experience!", "gold"), 13000);
   }
 });
 
@@ -184,7 +190,7 @@ window.addEventListener("DOMContentLoaded", () => {
   setInterval(rotateFacts, 10000);
 });
 
-// === 🎙️ Broadcast-Style Commentary System ===
+// === 🎙️ Broadcast Commentary System ===
 const commentaryBox = document.getElementById("commentaryBox");
 
 function showCommentary(message, mood = "blue", duration = 4500) {
@@ -198,7 +204,8 @@ function showCommentary(message, mood = "blue", duration = 4500) {
   else if (mood === "gold") commentaryBox.style.borderColor = "#ffb400";
   else commentaryBox.style.borderColor = "#007bff";
 
-  commentaryBox.style.color = mood === "red" ? "#d32f2f" : mood === "gold" ? "#b8860b" : "#0044cc";
+  commentaryBox.style.color =
+    mood === "red" ? "#d32f2f" : mood === "gold" ? "#b8860b" : "#0044cc";
 
   setTimeout(() => commentaryBox.classList.remove("show"), duration);
 }
