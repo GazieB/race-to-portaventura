@@ -84,7 +84,7 @@ footer {
   z-index: 9999;
   overflow: hidden;
   opacity: 1;
-  transition: background 1s ease, opacity 1s ease;
+  transition: background 1.2s ease, opacity 1.2s ease;
 }
 
 /* Fade overlay to white before redirect */
@@ -97,7 +97,7 @@ footer {
 #planeAnim {
   position: absolute;
   top: 50%;
-  left: -300px;
+  left: -350px;
   transform: translateY(-50%) scaleX(-1);
   display: flex;
   align-items: center;
@@ -105,38 +105,39 @@ footer {
 }
 
 .planeImage {
-  width: 220px;
+  width: 250px;
 }
 
+/* Larger, bolder banner */
 .banner {
   background: #ffeb3b;
   color: #000;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 10px 25px;
-  border-radius: 8px 0 0 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-weight: 800;
+  font-size: 1.5rem;
+  padding: 20px 50px;
+  border-radius: 10px 0 0 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
   white-space: nowrap;
-  margin-left: 20px;
-  border-left: 4px solid #000;
-  animation: wave 0.4s ease-in-out infinite alternate;
+  margin-left: 30px;
+  border-left: 6px solid #000;
+  animation: wave 0.5s ease-in-out infinite alternate;
 }
 
 /* === Animations === */
 #planeAnim.fly {
-  animation: flyAcross 4s ease-in-out forwards;
+  animation: flyAcross 6s ease-in-out forwards;
 }
 
 @keyframes flyAcross {
-  0%   { left: -300px; opacity: 0; }
+  0%   { left: -350px; opacity: 0; }
   10%  { opacity: 1; }
-  45%  { transform: translateY(calc(-50% - 8px)) scaleX(-1); }
-  55%  { transform: translateY(calc(-50% + 8px)) scaleX(-1); }
-  100% { left: 100vw; opacity: 0.2; transform: translateY(-50%) scaleX(-1); }
+  45%  { transform: translateY(calc(-50% - 10px)) scaleX(-1); }
+  55%  { transform: translateY(calc(-50% + 10px)) scaleX(-1); }
+  100% { left: 100vw; opacity: 0.3; transform: translateY(-50%) scaleX(-1); }
 }
 
 /* Banner flutter effect */
 @keyframes wave {
-  from { transform: rotate(1deg); }
-  to   { transform: rotate(-1deg); }
+  from { transform: rotate(2deg); }
+  to   { transform: rotate(-2deg); }
 }
