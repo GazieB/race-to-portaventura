@@ -98,17 +98,19 @@ footer {
   position: absolute;
   top: 50%;
   left: -350px;
-  transform: translateY(-50%) scaleX(-1);
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   opacity: 0;
 }
 
+/* Plane faces right */
 .planeImage {
   width: 250px;
+  transform: scaleX(-1);
 }
 
-/* Larger, bolder banner */
+/* Banner - larger, readable, trails behind plane */
 .banner {
   background: #ffeb3b;
   color: #000;
@@ -121,6 +123,7 @@ footer {
   margin-left: 30px;
   border-left: 6px solid #000;
   animation: wave 0.5s ease-in-out infinite alternate;
+  transform: scaleX(1); /* Fixes mirrored text */
 }
 
 /* === Animations === */
@@ -131,9 +134,9 @@ footer {
 @keyframes flyAcross {
   0%   { left: -350px; opacity: 0; }
   10%  { opacity: 1; }
-  45%  { transform: translateY(calc(-50% - 10px)) scaleX(-1); }
-  55%  { transform: translateY(calc(-50% + 10px)) scaleX(-1); }
-  100% { left: 100vw; opacity: 0.3; transform: translateY(-50%) scaleX(-1); }
+  45%  { transform: translateY(calc(-50% - 10px)); }
+  55%  { transform: translateY(calc(-50% + 10px)); }
+  100% { left: 100vw; opacity: 0.3; transform: translateY(-50%); }
 }
 
 /* Banner flutter effect */
