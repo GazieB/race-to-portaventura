@@ -92,42 +92,43 @@ footer {
   opacity: 1;
 }
 
-/* === Plane + Banner Group === */
+/* === Plane + Banner Group (Plane First, Banner Behind) === */
 #planeAnim {
   position: absolute;
   top: 50%;
   left: -400px;
   transform: translateY(-50%);
   display: flex;
+  flex-direction: row-reverse; /* 👈 Plane first, banner behind */
   align-items: center;
   gap: 40px;
   opacity: 0;
 }
 
-/* === Jet2 Plane (faces right) === */
+/* === Plane === */
 .planeImage {
   width: 250px;
   transform: scaleX(-1);
-  z-index: 2;
+  z-index: 2; /* Plane is in front */
 }
 
-/* === Jet2-Themed Banner (behind plane) === */
+/* === Banner === */
 .banner {
   background: #e4002b;
   color: #fff;
   font-weight: 800;
   font-size: 1.8rem;
   padding: 25px 60px;
-  border-radius: 0 12px 12px 0; /* round on right side */
+  border-radius: 12px 0 0 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
-  border-right: 6px solid #fff; /* “rope” connection */
+  border-left: 6px solid #fff;
   animation: wave 0.5s ease-in-out infinite alternate;
   transform: scaleX(1);
   letter-spacing: 2px;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+  z-index: 1; /* Behind the plane */
   position: relative;
-  z-index: 1;
 }
 
 /* === Shine Sweep === */
