@@ -14,43 +14,82 @@
       Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
     </p>
     <button id="startBtn">Start Presentation</button>
-    <footer>Powered by Assisted Travel for Assisted Travel ✈️ | TeamKB for the win 🏆 </footer>
+    <footer>✈️ Desgined By Assisted Travel For Assisted Travel ✈️ | 🏆 Team KB For The Win 🏆</footer>
   </div>
 
-   <!-- Plane animation overlay -->
+  <!-- ✅ Info Boxes -->
+  <aside id="factBox">
+    <p id="factText">Loading PortAventura facts...</p>
+  </aside>
+
+  <aside id="airportBox">
+    <p id="airportFact">Loading Newcastle Airport facts...</p>
+  </aside>
+
+  <aside id="reusBox">
+    <p id="reusFact">Loading Reus Airport facts...</p>
+  </aside>
+
+  <!-- ✈️ Plane animation overlay -->
   <div id="planeOverlay">
     <div id="planeAnim">
-      <img src="plane.png" alt="Plane" class="planeImage">
+      <img src="plane.png" alt="Plane" class="planeImage" />
       <div class="banner">TEAM KB FOR THE WIN</div>
     </div>
   </div>
 
-  <!-- ✅ Add this script at the very end -->
+  <!-- 🚀 Animation Logic -->
   <script>
     const startBtn = document.getElementById("startBtn");
     const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
 
     startBtn.addEventListener("click", () => {
-      // Fade out the welcome box
       document.querySelector(".welcome-container").classList.add("fadeOut");
-
-      // Show the overlay and start the plane animation
       overlay.style.display = "block";
 
-      // Start the plane flying animation
       setTimeout(() => plane.classList.add("fly"), 100);
-
-      // Fade to white AFTER the plane finishes crossing the screen
-      setTimeout(() => {
-        overlay.classList.add("fadeToWhite");
-      }, 6500); // Plane flies for 6s, fade starts just after
-
-      // Redirect to the game page after fade completes
-      setTimeout(() => {
-        window.location.href = "game.html";
-      }, 8000); // Full cinematic effect
+      setTimeout(() => overlay.classList.add("fadeToWhite"), 6500);
+      setTimeout(() => window.location.href = "game.html", 8000);
     });
+
+    // ✅ Random rotating facts (same as game)
+    const portaventuraFacts = [
+      "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
+      "🏨 Hotel guests get **free park access** during their stay.",
+      "🚆 Only 10 minutes from **Salou** and 1 hour from **Barcelona**.",
+      "🎟️ Includes **Ferrari Land** and **Caribe Aquatic Park**.",
+      "🍴 Over **50 restaurants** and snack spots in the resort.",
+      "🌙 Night shows, fireworks, and character parades every evening."
+    ];
+
+    const airportFacts = [
+      "🛫 Newcastle Airport serves **over 5 million passengers** per year.",
+      "🍔 Great dining with **Greggs, Burger King, Cabin Bar**, and more.",
+      "💺 The airport provides **special assistance** and priority lanes.",
+      "🛍️ Duty-free includes **World Duty Free** and **JD Sports**.",
+      "🚖 Around 15 minutes from **Newcastle city centre**.",
+      "🧳 Offers lounges, car rentals, and on-site parking."
+    ];
+
+    const reusFacts = [
+      "🛬 Airlines like **Jet2, Ryanair, and TUI** operate direct seasonal flights.",
+      "🌍 Handles **over 1 million passengers** annually.",
+      "🧳 Features **wheelchair access**, accessible toilets, and assistance staff.",
+      "🚗 Car hire available with **Avis, Hertz, Europcar, and Goldcar**.",
+      "🚌 Shuttle buses to **Salou, Tarragona, and PortAventura** every 30 mins.",
+      "☕ Cafés, duty-free, and family facilities available."
+    ];
+
+    function rotateFacts() {
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      document.getElementById("factText").innerHTML = pick(portaventuraFacts);
+      document.getElementById("airportFact").innerHTML = pick(airportFacts);
+      document.getElementById("reusFact").innerHTML = pick(reusFacts);
+    }
+
+    setInterval(rotateFacts, 10000);
+    rotateFacts();
   </script>
 </body>
 </html>
