@@ -85,12 +85,12 @@ footer {
   position: absolute;
   display: flex;
   align-items: center;
-  left: -900px;
+  left: -1000px;
   gap: 10px;
   will-change: transform;
 }
 
-/* Position the planes */
+/* Plane positions (top/middle/bottom) */
 .topPlane { bottom: 70%; transform: translateY(50%); }
 .midPlane { bottom: 45%; transform: translateY(50%); }
 .bottomPlane { bottom: 20%; transform: translateY(50%); }
@@ -123,9 +123,10 @@ footer {
 
 /* === Flight Animation === */
 .fly {
-  animation: planeFly 10s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
+  animation: planeFly 11s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
+/* Extended smooth flight — now goes completely off screen */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
@@ -136,10 +137,10 @@ footer {
   }
   95% {
     opacity: 1;
-    transform: translateY(50%) translateX(120vw);
+    transform: translateY(50%) translateX(140vw);
   }
   100% {
-    opacity: 1;
-    transform: translateY(50%) translateX(130vw);
+    opacity: 0;
+    transform: translateY(50%) translateX(160vw); /* ✅ full exit */
   }
 }
