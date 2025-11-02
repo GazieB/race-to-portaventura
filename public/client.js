@@ -13,6 +13,7 @@ const tracks = document.getElementById("tracks");
 let raceInProgress = false;
 let holdTimer = null;
 let holdStartTime = null;
+let commentaryInterval = null;
 
 const buzzer = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 buzzer.volume = 0.6;
@@ -31,24 +32,17 @@ window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && raceInProgress) {
     if (!holdTimer) {
       holdStartTime = Date.now();
-      console.log("🟡 Holding space...");
-
       holdTimer = setTimeout(() => {
         const holdDuration = Date.now() - holdStartTime;
-        if (holdDuration >= 1200) {
-          console.log("🚨 Cheat detected — sending to server!");
-          socket.emit("cheatDetected");
-        }
+        if (holdDuration >= 1200) socket.emit("cheatDetected");
       }, 1200);
     }
-
     socket.emit("tap");
   }
 });
 
 window.addEventListener("keyup", (e) => {
   if (e.code === "Space") {
-    console.log("🟢 Released space.");
     clearTimeout(holdTimer);
     holdTimer = null;
   }
@@ -66,33 +60,14 @@ socket.on("countdown", ({ ms }) => {
       setTimeout(() => (countdown.textContent = ""), 1000);
     }
   }, 1000);
+  showCommentary(`Race starting in ${seconds} seconds...`);
 });
 
 // === Cheat Alerts ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
-
-  const alert = document.createElement("div");
-  alert.textContent = `🚨 ${message}`;
-  Object.assign(alert.style, {
-    position: "fixed",
-    bottom: "30px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    background: "#ff0000",
-    color: "#fff",
-    padding: "14px 24px",
-    borderRadius: "999px",
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    fontFamily: "Poppins, sans-serif",
-    boxShadow: "0 0 25px rgba(255,0,0,0.6)",
-    textAlign: "center",
-    zIndex: 9999,
-  });
-  document.body.appendChild(alert);
-  setTimeout(() => alert.remove(), 3000);
+  showCommentary(`🚨 ${message}`);
 });
 
 // === Game State Updates ===
@@ -103,6 +78,7 @@ socket.on("state", (state) => {
 
   const sortedPlayers = [...state.players].sort((a, b) => b.distance - a.distance);
 
+  // Build Track
   state.players.forEach((p) => {
     const lane = document.createElement("div");
     lane.className = "lane";
@@ -129,6 +105,7 @@ socket.on("state", (state) => {
     tracks.appendChild(lane);
   });
 
+  // Leaderboard
   sortedPlayers.forEach((p, idx) => {
     const li = document.createElement("li");
     const pct = Math.min(100, Math.round((p.distance / state.finishDistance) * 100));
@@ -146,9 +123,22 @@ socket.on("state", (state) => {
 
   startBtn.disabled = state.inProgress || state.players.length === 0;
   resetBtn.disabled = state.players.length === 0;
+
+  // === Commentary triggers ===
+  if (state.inProgress && !commentaryInterval) {
+    startLiveCommentary(state);
+  } else if (!state.inProgress && commentaryInterval) {
+    clearInterval(commentaryInterval);
+    commentaryInterval = null;
+  }
+
+  if (state.finishedOrder && state.finishedOrder.length > 0) {
+    const winner = state.finishedOrder[0].name;
+    showCommentary(`🎉 ${winner} has landed first at PortAventura!`);
+  }
 });
 
-// === Info Boxes ===
+// === Fact Boxes ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
@@ -204,18 +194,29 @@ function showCommentary(message, duration = 4000) {
   setTimeout(() => commentaryBox.classList.remove("show"), duration);
 }
 
-// Example commentary triggers
-socket.on("countdown", ({ ms }) => {
-  showCommentary(`Race starting in ${ms / 1000} seconds...`);
-});
+// === Dynamic live commentary ===
+function startLiveCommentary(state) {
+  const comments = [
+    "💨 The planes are off to a flying start!",
+    "🔥 Things are heating up mid-race!",
+    "🎢 It’s neck and neck near Barcelona!",
+    "✈️ Look at them go — this is intense!",
+    "🌟 The crowd at PortAventura is cheering!",
+    "🚀 Someone just gained serious altitude!",
+    "🎯 A perfect take-off — what skill!",
+    "👏 What a close race — anyone can win!"
+  ];
 
-socket.on("state", (state) => {
-  if (state.finishedOrder && state.finishedOrder.length > 0) {
-    const winner = state.finishedOrder[0].name;
-    showCommentary(`🎉 ${winner} has landed first at PortAventura!`);
-  }
-});
+  commentaryInterval = setInterval(() => {
+    if (!raceInProgress) return;
+    const randomMsg = comments[Math.floor(Math.random() * comments.length)];
+    showCommentary(randomMsg);
+  }, 7000); // Every 7 seconds
+}
 
+// Reset commentary on race reset
 socket.on("reset", () => {
   showCommentary("🔁 The race has been reset — get ready for another round!");
+  clearInterval(commentaryInterval);
+  commentaryInterval = null;
 });
