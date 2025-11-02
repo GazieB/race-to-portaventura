@@ -163,7 +163,7 @@ button:disabled {
   margin-bottom: 10px;
 }
 
-/* === INFO BOXES === */
+/* === Info Boxes === */
 #factBox,
 #airportBox,
 #reusBox {
@@ -242,7 +242,7 @@ button:disabled {
   }
 }
 
-/* === 🎙️ COMMENTARY BOX === */
+/* === Commentary Box === */
 #commentaryBox {
   position: fixed;
   bottom: 25px;
