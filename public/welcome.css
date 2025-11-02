@@ -94,21 +94,22 @@ footer {
 }
 
 /* === Plane + Banner === */
-#planeAnim {
+.planeWrapper {
   position: absolute;
-  left: -250px;
   top: 50%;
-  transform: translateY(-50%) scaleX(-1); /* face right */
-  width: 220px;
+  left: -300px;
+  transform: translateY(-50%) scaleX(-1);
+  display: flex;
+  align-items: center;
   opacity: 0;
 }
 
-#planeAnim::after {
-  content: "TEAM KB FOR THE WIN";
-  position: absolute;
-  top: 50%;
-  left: 230px;               /* behind the plane */
-  transform: translateY(-50%);
+.planeImage {
+  width: 220px;
+}
+
+/* Banner text */
+.banner {
   background: #ffeb3b;
   color: #000;
   font-weight: 700;
@@ -117,17 +118,18 @@ footer {
   border-radius: 8px 0 0 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   white-space: nowrap;
-  animation: wave 0.4s ease-in-out infinite alternate;
+  margin-left: 20px;
   border-left: 4px solid #000;
+  animation: wave 0.4s ease-in-out infinite alternate;
 }
 
 /* === Animations === */
-#planeAnim.fly {
+.planeWrapper.fly {
   animation: flyAcross 4s ease-in-out forwards;
 }
 
 @keyframes flyAcross {
-  0%   { left: -250px; opacity: 0; }
+  0%   { left: -300px; opacity: 0; }
   10%  { opacity: 1; }
   45%  { transform: translateY(calc(-50% - 8px)) scaleX(-1); }
   55%  { transform: translateY(calc(-50% + 8px)) scaleX(-1); }
@@ -136,6 +138,6 @@ footer {
 
 /* Subtle banner flutter */
 @keyframes wave {
-  from { transform: translateY(-50%) rotate(1deg); }
-  to   { transform: translateY(-50%) rotate(-1deg); }
+  from { transform: rotate(1deg); }
+  to   { transform: rotate(-1deg); }
 }
