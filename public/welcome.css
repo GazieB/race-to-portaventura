@@ -11,7 +11,7 @@ body {
   align-items: center;
 }
 
-/* === Matching Game Style Box (Centered) === */
+/* === Centered Welcome Box === */
 .game-style-container {
   text-align: center;
   background: #fff;
@@ -95,10 +95,11 @@ footer {
   will-change: transform;
 }
 
-/* Plane positions (top/middle/bottom) */
-.topPlane { bottom: 70%; transform: translateY(50%); }
-.midPlane { bottom: 45%; transform: translateY(50%); }
-.bottomPlane { bottom: 20%; transform: translateY(50%); }
+/* === 4 Plane Positions === */
+.topPlane { bottom: 80%; transform: translateY(50%); }
+.upperMidPlane { bottom: 60%; transform: translateY(50%); }
+.lowerMidPlane { bottom: 35%; transform: translateY(50%); }
+.bottomPlane { bottom: 15%; transform: translateY(50%); }
 
 /* === Plane === */
 .planeImage {
@@ -131,7 +132,6 @@ footer {
   animation: planeFly 11s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
-/* Extended smooth flight — full exit */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
