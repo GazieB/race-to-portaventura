@@ -11,7 +11,7 @@ body {
   align-items: center;
 }
 
-/* === Welcome Box (Styled Like Game) === */
+/* === Welcome Box (Game Style) === */
 .game-style-container {
   background: white;
   border-radius: 20px;
@@ -90,31 +90,16 @@ footer {
   opacity: 0;
 }
 
-/* Plane positions (4 rows) */
-.topPlane {
-  top: 10%;
-  animation-delay: 0s;
-}
-
-.upperMidPlane {
-  top: 30%;
-  animation-delay: 0.5s;
-}
-
-.lowerMidPlane {
-  top: 55%;
-  animation-delay: 1s;
-}
-
-.bottomPlane {
-  top: 75%;
-  animation-delay: 1.5s;
-}
+/* Position each plane */
+.topPlane { top: 10%; }
+.upperMidPlane { top: 30%; }
+.lowerMidPlane { top: 55%; }
+.bottomPlane { top: 75%; }
 
 /* === Plane Image === */
 .planeImage {
   width: 260px;
-  transform: scaleX(-1); /* face right */
+  transform: scaleX(-1); /* plane faces right */
   z-index: 2;
   position: relative;
 }
@@ -137,21 +122,37 @@ footer {
 }
 
 /* === Flight Animation === */
-.fly {
+.fly.topPlane {
   animation: flyAcross 10s linear forwards;
+  animation-delay: 0s;
+  opacity: 1;
+}
+.fly.upperMidPlane {
+  animation: flyAcross 10s linear forwards;
+  animation-delay: 0.5s;
+  opacity: 1;
+}
+.fly.lowerMidPlane {
+  animation: flyAcross 10s linear forwards;
+  animation-delay: 1s;
+  opacity: 1;
+}
+.fly.bottomPlane {
+  animation: flyAcross 10s linear forwards;
+  animation-delay: 1.5s;
   opacity: 1;
 }
 
 @keyframes flyAcross {
   0% {
-    left: -100%;
+    left: -120%;
     opacity: 1;
   }
-  90% {
+  85% {
     opacity: 1;
   }
   100% {
-    left: 120%;
+    left: 130%;
     opacity: 0;
   }
 }
