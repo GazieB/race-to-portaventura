@@ -7,68 +7,58 @@
   <link rel="stylesheet" href="welcome.css" />
 </head>
 <body>
-  <div class="game-style-container" id="welcomeScreen">
-    <h1>✈️ Race from Newcastle Airport to PortAventura 📈</h1>
-    <p class="subtitle">
-      A live multiplayer experience created by <strong>Gaz</strong>
-    </p>
+  <div class="game-style-container" id="welcomeBox">
+    <h1>🎢 Welcome to Race to PortAventura!</h1>
+    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
     <p class="info">
-      Get ready to race from Newcastle Airport all the way to PortAventura World! 🌍🎢  
-      Spam the <strong>Spacebar</strong> to fly faster — but no holding it down!
+      Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
     </p>
-
     <button id="startBtn">Start Presentation</button>
-
-    <footer>
-      Powered by Jet2 Holidays ✈️ | PortAventura World 🎡
-    </footer>
+    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
-  <!-- Plane + Banner Animation Overlay -->
+  <!-- Plane Animation Overlay -->
   <div id="planeOverlay">
     <div class="planeRow topPlane">
-      <div class="banner">TEAM KB FOR THE WIN</div>
-      <img src="plane.png" alt="Plane" class="planeImage" />
+      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <img src="plane.png" alt="Plane" class="planeImage">
     </div>
-
     <div class="planeRow upperMidPlane">
-      <div class="banner">TEAM KB FOR THE WIN</div>
-      <img src="plane.png" alt="Plane" class="planeImage" />
+      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <img src="plane.png" alt="Plane" class="planeImage">
     </div>
-
     <div class="planeRow lowerMidPlane">
-      <div class="banner">TEAM KB FOR THE WIN</div>
-      <img src="plane.png" alt="Plane" class="planeImage" />
+      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <img src="plane.png" alt="Plane" class="planeImage">
     </div>
-
     <div class="planeRow bottomPlane">
-      <div class="banner">TEAM KB FOR THE WIN</div>
-      <img src="plane.png" alt="Plane" class="planeImage" />
+      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <img src="plane.png" alt="Plane" class="planeImage">
     </div>
   </div>
 
   <script>
     const startBtn = document.getElementById("startBtn");
     const overlay = document.getElementById("planeOverlay");
-    const planes = document.querySelectorAll(".planeRow");
-    const welcomeScreen = document.getElementById("welcomeScreen");
+    const welcomeBox = document.getElementById("welcomeBox");
 
     startBtn.addEventListener("click", () => {
       // Fade out welcome box
-      welcomeScreen.classList.add("fadeOut");
+      welcomeBox.classList.add("fadeOut");
 
-      // Show planes after fade
+      // Start plane overlay
+      overlay.style.display = "block";
+
+      // Start animation for all planes
+      const planes = document.querySelectorAll(".planeRow");
       setTimeout(() => {
-        overlay.style.display = "block";
-        planes.forEach((p, i) => {
-          setTimeout(() => p.classList.add("fly"), i * 400); // slight stagger
-        });
-      }, 700);
+        planes.forEach((plane) => plane.classList.add("fly"));
+      }, 200);
 
-      // Redirect after flight ends
+      // Redirect to the game after flight finishes
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 11500);
+      }, 11500); // after 11.5s (matches animation length)
     });
   </script>
 </body>
