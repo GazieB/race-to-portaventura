@@ -69,7 +69,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* === Fade-In for Welcome Box === */
+/* === Fade-In Animation === */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -87,59 +87,86 @@ footer {
   transition: background 1.2s ease, opacity 1.2s ease;
 }
 
-/* Fade overlay to white before redirect */
 #planeOverlay.fadeToWhite {
   background: white;
   opacity: 1;
 }
 
-/* === Plane + Banner === */
+/* === Plane + Banner Group === */
 #planeAnim {
   position: absolute;
   top: 50%;
-  left: -350px;
+  left: -400px;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
+  gap: 40px;
   opacity: 0;
 }
 
-/* Plane faces right */
+/* === Jet2 Plane (faces right) === */
 .planeImage {
   width: 250px;
   transform: scaleX(-1);
+  z-index: 2;
 }
 
-/* Banner - larger, readable, trails behind plane */
+/* === Jet2-Themed Banner (behind plane) === */
 .banner {
-  background: #ffeb3b;
-  color: #000;
+  background: #e4002b;
+  color: #fff;
   font-weight: 800;
-  font-size: 1.5rem;
-  padding: 20px 50px;
-  border-radius: 10px 0 0 10px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  font-size: 1.8rem;
+  padding: 25px 60px;
+  border-radius: 0 12px 12px 0; /* round on right side */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
-  margin-left: 30px;
-  border-left: 6px solid #000;
+  border-right: 6px solid #fff; /* “rope” connection */
   animation: wave 0.5s ease-in-out infinite alternate;
-  transform: scaleX(1); /* Fixes mirrored text */
+  transform: scaleX(1);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+  position: relative;
+  z-index: 1;
 }
 
-/* === Animations === */
+/* === Shine Sweep === */
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -75%; }
+  100% { left: 125%; }
+}
+
+/* === Flight Animation === */
 #planeAnim.fly {
   animation: flyAcross 6s ease-in-out forwards;
 }
 
 @keyframes flyAcross {
-  0%   { left: -350px; opacity: 0; }
+  0%   { left: -400px; opacity: 0; }
   10%  { opacity: 1; }
   45%  { transform: translateY(calc(-50% - 10px)); }
   55%  { transform: translateY(calc(-50% + 10px)); }
   100% { left: 100vw; opacity: 0.3; transform: translateY(-50%); }
 }
 
-/* Banner flutter effect */
+/* === Banner Flutter === */
 @keyframes wave {
   from { transform: rotate(2deg); }
   to   { transform: rotate(-2deg); }
