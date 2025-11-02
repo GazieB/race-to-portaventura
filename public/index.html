@@ -7,14 +7,14 @@
   <link rel="stylesheet" href="welcome.css" />
 </head>
 <body>
-  <div class="main-card">
+  <div class="main-card" id="welcomeCard">
     <h1>✈️ Welcome to <span>Race to PortAventura!</span></h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>GazieB</strong></p>
+    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
     <p class="info">
       Get ready to race from Newcastle Airport all the way to PortAventura World! 🎢🌍
     </p>
     <button id="startBtn">Start Presentation</button>
-    <footer>✈️ Desgined by Assisted Travel for Assisted Travel ✈️ | 🏆 TeamKB For The Win 🏆</footer>
+    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
   <!-- Plane animation overlay -->
@@ -29,20 +29,26 @@
     const startBtn = document.getElementById("startBtn");
     const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
+    const card = document.getElementById("welcomeCard");
 
     startBtn.addEventListener("click", () => {
-      overlay.style.display = "block";
-      setTimeout(() => plane.classList.add("fly"), 100);
+      // Fade out the welcome card
+      card.classList.add("fadeOut");
 
-      // fade out smoothly
-      setTimeout(() => overlay.classList.add("fadeToWhite"), 9500);
+      // Start the plane animation after fade completes
+      setTimeout(() => {
+        overlay.style.display = "block";
+        plane.classList.add("fly");
+      }, 1500);
 
-      // redirect to main game
+      // Fade to white near the end
+      setTimeout(() => overlay.classList.add("fadeToWhite"), 10500);
+
+      // Redirect to main game
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 11000);
+      }, 12000);
     });
   </script>
 </body>
 </html>
-
