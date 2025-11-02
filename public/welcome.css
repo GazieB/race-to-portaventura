@@ -96,7 +96,7 @@ footer {
 .planeImage {
   width: 240px;
   height: auto;
-  transform: scaleX(1); /* ✅ Plane faces RIGHT */
+  transform: scaleX(-1); /* ✅ Plane faces RIGHT */
 }
 
 .banner {
@@ -149,3 +149,4 @@ footer {
   from { background: transparent; }
   to { background: white; }
 }
+
