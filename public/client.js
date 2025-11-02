@@ -1,3 +1,6 @@
+// =============================
+// Race to PortAventura - client.js (Dynamic Commentary Edition)
+// =============================
 console.log("✅ client.js loaded");
 
 const socket = io();
@@ -9,15 +12,25 @@ const resetBtn = document.getElementById("resetBtn");
 const leaderboard = document.getElementById("leaderboard");
 const countdown = document.getElementById("countdown");
 const tracks = document.getElementById("tracks");
+const commentaryBox = document.getElementById("commentaryBox");
 
 let raceInProgress = false;
 let holdTimer = null;
 let holdStartTime = null;
 let commentaryInterval = null;
-let latestState = null; // ✅ New: Keep latest state for live commentary
+let latestState = null;
 
 const buzzer = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 buzzer.volume = 0.6;
+
+// === Utility: Show commentary messages ===
+function showCommentary(text, color = "white") {
+  if (!commentaryBox) return;
+  commentaryBox.innerHTML = `🎤 ${text}`;
+  commentaryBox.style.borderColor = color === "gold" ? "#ffd700" : "#007bff";
+  commentaryBox.classList.add("show");
+  setTimeout(() => commentaryBox.classList.remove("show"), 4500);
+}
 
 // === Join / Start / Reset ===
 joinBtn.addEventListener("click", () => {
@@ -28,14 +41,17 @@ joinBtn.addEventListener("click", () => {
 startBtn.addEventListener("click", () => socket.emit("start"));
 resetBtn.addEventListener("click", () => socket.emit("reset"));
 
-// === Spacebar Controls (with Anti-Cheat) ===
+// === Spacebar Controls (Anti-Cheat) ===
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && raceInProgress) {
     if (!holdTimer) {
       holdStartTime = Date.now();
       holdTimer = setTimeout(() => {
         const holdDuration = Date.now() - holdStartTime;
-        if (holdDuration >= 1200) socket.emit("cheatDetected");
+        if (holdDuration >= 1200) {
+          console.log("🚨 Cheat detected — sending to server!");
+          socket.emit("cheatDetected");
+        }
       }, 1200);
     }
     socket.emit("tap");
@@ -61,19 +77,37 @@ socket.on("countdown", ({ ms }) => {
       setTimeout(() => (countdown.textContent = ""), 1000);
     }
   }, 1000);
-  showCommentary(`Race starting in ${seconds} seconds...`, "gold");
 });
 
-// === Cheat Alerts ===
+// === Cheat Alert ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
-  showCommentary(`🚨 ${message}`, "red");
+  const alert = document.createElement("div");
+  alert.textContent = `🚨 ${message}`;
+  Object.assign(alert.style, {
+    position: "fixed",
+    bottom: "30px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "#ff0000",
+    color: "#fff",
+    padding: "14px 24px",
+    borderRadius: "999px",
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+    fontFamily: "Poppins, sans-serif",
+    boxShadow: "0 0 25px rgba(255,0,0,0.6)",
+    textAlign: "center",
+    zIndex: 9999,
+  });
+  document.body.appendChild(alert);
+  setTimeout(() => alert.remove(), 3000);
 });
 
-// === Game State Updates ===
+// === Update Game State ===
 socket.on("state", (state) => {
-  latestState = state; // ✅ Keep updating current state
+  latestState = state;
   raceInProgress = state.inProgress;
   tracks.innerHTML = "";
   leaderboard.innerHTML = "";
@@ -107,7 +141,7 @@ socket.on("state", (state) => {
     tracks.appendChild(lane);
   });
 
-  // Leaderboard
+  // Build Leaderboard
   sortedPlayers.forEach((p, idx) => {
     const li = document.createElement("li");
     const pct = Math.min(100, Math.round((p.distance / state.finishDistance) * 100));
@@ -126,82 +160,81 @@ socket.on("state", (state) => {
   startBtn.disabled = state.inProgress || state.players.length === 0;
   resetBtn.disabled = state.players.length === 0;
 
-  // === Commentary triggers ===
-  if (state.inProgress && !commentaryInterval) {
-    startLiveCommentary(); // ✅ No longer passes stale state
-  } else if (!state.inProgress && commentaryInterval) {
+  // 🏁 End-of-Race Commentary
+  const finishedAll = state.players.every((p) => p.finished);
+  if (finishedAll && !state.inProgress && state.players.length > 0) {
     clearInterval(commentaryInterval);
-    commentaryInterval = null;
-  }
-
-  // === Winner + Closing Messages ===
-  if (state.finishedOrder && state.finishedOrder.length > 0) {
-    const winner = state.finishedOrder[0].name;
+    const winner = sortedPlayers[0]?.name || "Someone";
     showCommentary(`🏆 ${winner} has landed first at PortAventura!`, "gold");
-
-    // Delayed outro messages
     setTimeout(() => showCommentary("🎉 Thank you for taking part in the race!", "gold"), 5000);
-    setTimeout(() => showCommentary("🎧 Thank you for listening!", "blue"), 9000);
+    setTimeout(() => showCommentary("🎧 Thank you for taking part!", "blue"), 9000);
     setTimeout(() => showCommentary("🎢 I hope you enjoyed the experience!", "gold"), 13000);
   }
 });
 
-// === 🎙️ Broadcast Commentary System ===
-const commentaryBox = document.getElementById("commentaryBox");
-
-function showCommentary(message, mood = "blue", duration = 4500) {
-  if (!commentaryBox) return;
-
-  commentaryBox.textContent = `🎤 Gaz Reports: ${message}`;
-  commentaryBox.classList.add("show");
-
-  // Mood-based color styling
-  if (mood === "red") commentaryBox.style.borderColor = "#d32f2f";
-  else if (mood === "gold") commentaryBox.style.borderColor = "#ffb400";
-  else commentaryBox.style.borderColor = "#007bff";
-
-  commentaryBox.style.color =
-    mood === "red" ? "#d32f2f" : mood === "gold" ? "#b8860b" : "#0044cc";
-
-  setTimeout(() => commentaryBox.classList.remove("show"), duration);
-}
-
-// === Dynamic live commentary ===
+// === Dynamic Live Commentary ===
 function startLiveCommentary() {
   const neutralComments = [
     "💨 The planes are off to a flying start!",
     "🔥 Things are heating up mid-race!",
-    "🎢 It’s neck and neck near Barcelona!",
+    "🎢 It’s neck and neck over the Mediterranean!",
     "🌟 The crowd at PortAventura is cheering!",
     "🚀 Someone just gained serious altitude!",
     "🎯 Smooth flying — what control!",
-    "👏 It’s still anyone’s race!",
+    "👏 It’s still anyone’s race!"
   ];
 
   commentaryInterval = setInterval(() => {
     if (!raceInProgress || !latestState) return;
+    const players = latestState.players;
+    if (!players || players.length === 0) return;
 
-    const randomMsg = neutralComments[Math.floor(Math.random() * neutralComments.length)];
-    showCommentary(randomMsg, "blue");
+    const sorted = [...players].sort((a, b) => b.distance - a.distance);
+    const first = sorted[0];
+    const last = sorted[sorted.length - 1];
 
-    // ✅ NEW: Correct last place detection
-    if (latestState.players && latestState.players.length > 1 && Math.random() < 0.4) {
-      const sorted = [...latestState.players].sort((a, b) => b.distance - a.distance);
-      const last = sorted[sorted.length - 1];
-      if (last && !last.finished) {
-        const cheekyComments = [
-          `😴 Looks like ${last.name} can’t be bothered today!`,
-          `🐢 ${last.name} might still be on the runway!`,
-          `☕ ${last.name} stopped for a coffee break!`,
-          `🛬 ${last.name} taking the scenic route again?`
-        ];
-        showCommentary(cheekyComments[Math.floor(Math.random() * cheekyComments.length)], "blue");
-      }
+    const randomRoll = Math.random();
+
+    // 🥇 Leader callouts
+    if (randomRoll < 0.4 && first && !first.finished) {
+      const leaderComments = [
+        `🔥 ${first.name} is leading the race right now!`,
+        `✈️ ${first.name} is flying ahead of the pack!`,
+        `🚀 ${first.name} looks unstoppable!`,
+        `🏁 ${first.name} is showing everyone how it’s done!`
+      ];
+      const message = leaderComments[Math.floor(Math.random() * leaderComments.length)];
+      showCommentary(message, "gold");
+
+      // 💫 Highlight the leader on leaderboard
+      const leaderboardItems = document.querySelectorAll("#leaderboard li");
+      leaderboardItems.forEach(li => {
+        if (li.textContent.includes(first.name)) {
+          li.classList.add("leader-flash");
+          setTimeout(() => li.classList.remove("leader-flash"), 1200);
+        }
+      });
+    }
+
+    // 😎 Neutral updates
+    else if (randomRoll < 0.8) {
+      showCommentary(neutralComments[Math.floor(Math.random() * neutralComments.length)], "blue");
+    }
+
+    // 🐢 Cheeky comments for last place
+    else if (last && !last.finished) {
+      const cheekyComments = [
+        `😴 Looks like ${last.name} can’t be bothered today!`,
+        `🐢 ${last.name} might still be on the runway!`,
+        `☕ ${last.name} stopped for a coffee break!`,
+        `🛬 ${last.name} taking the scenic route again?`
+      ];
+      showCommentary(cheekyComments[Math.floor(Math.random() * cheekyComments.length)], "blue");
     }
   }, 7000);
 }
 
-// === Facts ===
+// === Facts Rotation ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
@@ -245,4 +278,5 @@ function rotateFacts() {
 window.addEventListener("DOMContentLoaded", () => {
   rotateFacts();
   setInterval(rotateFacts, 10000);
+  startLiveCommentary();
 });
