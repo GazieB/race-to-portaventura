@@ -17,36 +17,40 @@
     <footer>Powered by Assisted Travel for Assisted Travel ✈️ | TeamKB for the win 🏆 </footer>
   </div>
 
-  <!-- Plane animation overlay -->
+   <!-- Plane animation overlay -->
   <div id="planeOverlay">
-    <div id="planeAnim" class="planeWrapper">
+    <div id="planeAnim">
       <img src="plane.png" alt="Plane" class="planeImage">
       <div class="banner">TEAM KB FOR THE WIN</div>
     </div>
   </div>
 
+  <!-- ✅ Add this script at the very end -->
   <script>
     const startBtn = document.getElementById("startBtn");
-    const overlay = document.getElementById("planeOverlay");
     const plane = document.getElementById("planeAnim");
-    const container = document.querySelector(".welcome-container");
+    const overlay = document.getElementById("planeOverlay");
 
     startBtn.addEventListener("click", () => {
-      startBtn.disabled = true;
-      container.classList.add("fadeOut");
+      // Fade out the welcome box
+      document.querySelector(".welcome-container").classList.add("fadeOut");
+
+      // Show the overlay and start the plane animation
       overlay.style.display = "block";
 
+      // Start the plane flying animation
       setTimeout(() => plane.classList.add("fly"), 100);
 
+      // Fade to white AFTER the plane finishes crossing the screen
       setTimeout(() => {
         overlay.classList.add("fadeToWhite");
-      }, 3500);
+      }, 6500); // Plane flies for 6s, fade starts just after
 
+      // Redirect to the game page after fade completes
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 4500);
+      }, 8000); // Full cinematic effect
     });
   </script>
 </body>
 </html>
-
