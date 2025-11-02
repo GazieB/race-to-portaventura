@@ -68,6 +68,7 @@ socket.on("countdown", ({ ms }) => {
   }, 1000);
 });
 
+// === Cheat Alerts ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
@@ -94,6 +95,7 @@ socket.on("cheatAlert", ({ name, message }) => {
   setTimeout(() => alert.remove(), 3000);
 });
 
+// === Game State Updates ===
 socket.on("state", (state) => {
   raceInProgress = state.inProgress;
   tracks.innerHTML = "";
@@ -146,6 +148,7 @@ socket.on("state", (state) => {
   resetBtn.disabled = state.players.length === 0;
 });
 
+// === Info Boxes ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
@@ -191,3 +194,28 @@ window.addEventListener("DOMContentLoaded", () => {
   setInterval(rotateFacts, 10000);
 });
 
+// === 🎙️ Commentary System ===
+const commentaryBox = document.getElementById("commentaryBox");
+
+function showCommentary(message, duration = 4000) {
+  if (!commentaryBox) return;
+  commentaryBox.textContent = "🎙️ " + message;
+  commentaryBox.classList.add("show");
+  setTimeout(() => commentaryBox.classList.remove("show"), duration);
+}
+
+// Example commentary triggers
+socket.on("countdown", ({ ms }) => {
+  showCommentary(`Race starting in ${ms / 1000} seconds...`);
+});
+
+socket.on("state", (state) => {
+  if (state.finishedOrder && state.finishedOrder.length > 0) {
+    const winner = state.finishedOrder[0].name;
+    showCommentary(`🎉 ${winner} has landed first at PortAventura!`);
+  }
+});
+
+socket.on("reset", () => {
+  showCommentary("🔁 The race has been reset — get ready for another round!");
+});
