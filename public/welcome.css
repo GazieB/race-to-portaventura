@@ -26,7 +26,7 @@ body {
   transform: scale(0.95);
 }
 
-/* === Text Styles === */
+/* === Text + Buttons === */
 h1 {
   color: #e4002b;
   font-size: 2rem;
@@ -46,7 +46,6 @@ h1 {
   font-size: 1rem;
 }
 
-/* === Button Styling === */
 button {
   background: #e4002b;
   color: white;
@@ -81,17 +80,20 @@ footer {
   z-index: 1000;
 }
 
-/* Plane + Banner container */
-#planeAnim {
+/* === Plane Rows === */
+.planeRow {
   position: absolute;
-  bottom: 45%;
-  transform: translateY(50%);
   display: flex;
   align-items: center;
-  gap: 10px;
   left: -900px;
+  gap: 10px;
   will-change: transform;
 }
+
+/* Position the planes */
+.topPlane { bottom: 70%; transform: translateY(50%); }
+.midPlane { bottom: 45%; transform: translateY(50%); }
+.bottomPlane { bottom: 20%; transform: translateY(50%); }
 
 /* === Plane === */
 .planeImage {
@@ -102,29 +104,28 @@ footer {
   position: relative;
 }
 
-/* === Banner (attached to plane's tail) === */
+/* === Banner (attached behind) === */
 .banner {
   background: #e4002b;
   color: white;
   font-weight: 700;
   font-size: 2rem;
   padding: 25px 70px;
-  border-radius: 10px 0 0 10px; /* ✅ Rounded trailing edge */
+  border-radius: 10px 0 0 10px;
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.25);
-  transform-origin: right center; /* Attach to plane's tail */
+  transform-origin: right center;
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  margin-right: -20px; /* Slight overlap to attach visually */
+  margin-right: -20px;
 }
 
-/* === Plane Flight Animation === */
+/* === Flight Animation === */
 .fly {
   animation: planeFly 10s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
-/* Smooth, level flight */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
