@@ -18,7 +18,7 @@
     <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
-  <!-- === Info Boxes (Bottom Row) === -->
+  <!-- === Info Boxes (Stay Visible) === -->
   <div class="info-row">
     <aside id="factBox">
       <p id="factText">Loading PortAventura facts...</p>
@@ -46,30 +46,25 @@
     const startBtn = document.getElementById("startBtn");
     const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
-    const infoRow = document.querySelector(".info-row");
 
     startBtn.addEventListener("click", () => {
-      // Fade out the welcome box
+      // Fade out the welcome box only
       document.querySelector(".welcome-container").classList.add("fadeOut");
 
-      // Keep info boxes visible during the plane animation
-      infoRow.style.transition = "opacity 1s ease";
-      infoRow.style.opacity = "1";
-
-      // Show overlay + start plane animation
+      // Show overlay and start plane animation
       overlay.style.display = "block";
       setTimeout(() => plane.classList.add("fly"), 100);
 
-      // Fade out info boxes and overlay at the end
+      // Keep info boxes visible — no fade
+      // Only fade out the overlay at the end for a clean transition
       setTimeout(() => {
-        infoRow.style.opacity = "0";
         overlay.classList.add("fadeToWhite");
-      }, 6500);
+      }, 7000);
 
       // Redirect to game page
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 8000);
+      }, 8500);
     });
 
     // === Facts Arrays ===
