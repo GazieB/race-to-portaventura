@@ -1,4 +1,4 @@
-/* === Global Styling === */
+/* === Global Page Styling === */
 body {
   margin: 0;
   padding: 0;
@@ -8,7 +8,7 @@ body {
   height: 100vh;
 }
 
-/* === Matching Game Style Card === */
+/* === Matching Game Style Box === */
 .game-style-container {
   text-align: center;
   background: #fff;
@@ -26,6 +26,7 @@ body {
   transform: scale(0.95);
 }
 
+/* === Text Styles === */
 h1 {
   color: #e4002b;
   font-size: 2rem;
@@ -45,6 +46,7 @@ h1 {
   font-size: 1rem;
 }
 
+/* === Button Styling === */
 button {
   background: #e4002b;
   color: white;
@@ -79,7 +81,7 @@ footer {
   z-index: 1000;
 }
 
-/* Plane and banner layout */
+/* Plane + Banner container */
 #planeAnim {
   position: absolute;
   bottom: 45%;
@@ -91,37 +93,38 @@ footer {
   will-change: transform;
 }
 
-/* Plane faces right and pulls the banner */
+/* === Plane === */
 .planeImage {
   width: 260px;
   height: auto;
+  transform: scaleX(-1); /* ✅ Faces RIGHT */
   z-index: 2;
   position: relative;
 }
 
-/* Banner behind plane */
+/* === Banner (attached to plane's tail) === */
 .banner {
   background: #e4002b;
   color: white;
   font-weight: 700;
   font-size: 2rem;
   padding: 25px 70px;
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px 0 0 10px; /* ✅ Rounded trailing edge */
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.25);
-  transform-origin: left center;
+  transform-origin: right center; /* Attach to plane's tail */
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  margin-right: -20px;
+  margin-right: -20px; /* Slight overlap to attach visually */
 }
 
-/* Smooth, stable flight */
+/* === Plane Flight Animation === */
 .fly {
   animation: planeFly 10s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
-/* Stable movement with no distortion */
+/* Smooth, level flight */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
