@@ -10,7 +10,7 @@ body {
   overflow: hidden;
 }
 
-/* === Welcome Container === */
+/* === Welcome Box === */
 .welcome-container {
   text-align: center;
   background: white;
@@ -69,16 +69,10 @@ footer {
   font-size: 0.9rem;
 }
 
-/* === Fade-In Animation for Welcome Box === */
+/* === Fade-In for Welcome Box === */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* === Plane Overlay === */
@@ -93,44 +87,55 @@ footer {
   transition: background 1s ease, opacity 1s ease;
 }
 
-/* Fades the overlay to white before transition */
+/* Fade overlay to white before redirect */
 #planeOverlay.fadeToWhite {
   background: white;
   opacity: 1;
 }
 
-/* === Plane Animation === */
+/* === Plane + Banner === */
 #planeAnim {
   position: absolute;
-  left: -220px;                /* start off-screen left */
-  top: 50%;                    /* center vertically */
-  transform: translateY(-50%) scaleX(-1); /* face right like in game */
+  left: -250px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1); /* face right */
   width: 220px;
   opacity: 0;
 }
 
+#planeAnim::after {
+  content: "TEAM KB FOR THE WIN";
+  position: absolute;
+  top: 50%;
+  left: 230px;               /* behind the plane */
+  transform: translateY(-50%);
+  background: #ffeb3b;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 10px 25px;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  white-space: nowrap;
+  animation: wave 0.4s ease-in-out infinite alternate;
+  border-left: 4px solid #000;
+}
+
+/* === Animations === */
 #planeAnim.fly {
   animation: flyAcross 4s ease-in-out forwards;
 }
 
-/* === Flight Animation === */
 @keyframes flyAcross {
-  0% {
-    left: -220px;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  45% {
-    transform: translateY(calc(-50% - 8px)) scaleX(-1); /* gentle climb */
-  }
-  55% {
-    transform: translateY(calc(-50% + 8px)) scaleX(-1); /* gentle drop */
-  }
-  100% {
-    left: 100vw;
-    opacity: 0.2;
-    transform: translateY(-50%) scaleX(-1);
-  }
+  0%   { left: -250px; opacity: 0; }
+  10%  { opacity: 1; }
+  45%  { transform: translateY(calc(-50% - 8px)) scaleX(-1); }
+  55%  { transform: translateY(calc(-50% + 8px)) scaleX(-1); }
+  100% { left: 100vw; opacity: 0.2; transform: translateY(-50%) scaleX(-1); }
+}
+
+/* Subtle banner flutter */
+@keyframes wave {
+  from { transform: translateY(-50%) rotate(1deg); }
+  to   { transform: translateY(-50%) rotate(-1deg); }
 }
