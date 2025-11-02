@@ -96,10 +96,10 @@ footer {
 }
 
 /* === 4 Plane Positions === */
-.topPlane { bottom: 80%; transform: translateY(50%); }
-.upperMidPlane { bottom: 60%; transform: translateY(50%); }
-.lowerMidPlane { bottom: 35%; transform: translateY(50%); }
-.bottomPlane { bottom: 15%; transform: translateY(50%); }
+.topPlane { bottom: 80%; transform: translateY(50%) scale(0.8); }       /* smaller */
+.upperMidPlane { bottom: 60%; transform: translateY(50%) scale(1); }
+.lowerMidPlane { bottom: 35%; transform: translateY(50%) scale(1); }
+.bottomPlane { bottom: 15%; transform: translateY(50%) scale(0.8); }    /* smaller */
 
 /* === Plane === */
 .planeImage {
@@ -132,6 +132,7 @@ footer {
   animation: planeFly 11s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
+/* Extended smooth flight — full exit */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
