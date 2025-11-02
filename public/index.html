@@ -31,7 +31,12 @@
       <img src="plane.png" alt="Plane" class="planeImage" />
     </div>
 
-    <div class="planeRow midPlane">
+    <div class="planeRow upperMidPlane">
+      <div class="banner">TEAM KB FOR THE WIN</div>
+      <img src="plane.png" alt="Plane" class="planeImage" />
+    </div>
+
+    <div class="planeRow lowerMidPlane">
       <div class="banner">TEAM KB FOR THE WIN</div>
       <img src="plane.png" alt="Plane" class="planeImage" />
     </div>
@@ -56,14 +61,14 @@
       setTimeout(() => {
         overlay.style.display = "block";
         planes.forEach((p, i) => {
-          setTimeout(() => p.classList.add("fly"), i * 500); // stagger by 0.5s
+          setTimeout(() => p.classList.add("fly"), i * 400); // slight stagger
         });
       }, 700);
 
-      // Redirect after animation ends
+      // Redirect after flight ends
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 11000);
+      }, 11500);
     });
   </script>
 </body>
