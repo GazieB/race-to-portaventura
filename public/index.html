@@ -7,17 +7,24 @@
   <link rel="stylesheet" href="welcome.css" />
 </head>
 <body>
-  <div class="main-card" id="welcomeCard">
-    <h1>✈️ Welcome to <span>Race to PortAventura!</span></h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
-    <p class="info">
-      Get ready to race from Newcastle Airport all the way to PortAventura World! 🎢🌍
+  <div class="game-style-container" id="welcomeScreen">
+    <h1>✈️ Race from Newcastle Airport to PortAventura 📈</h1>
+    <p class="subtitle">
+      A live multiplayer experience created by <strong>Gaz</strong>
     </p>
+    <p class="info">
+      Get ready to race from Newcastle Airport all the way to PortAventura World! 🌍🎢  
+      Spam the <strong>Spacebar</strong> to fly faster — but no holding it down!
+    </p>
+
     <button id="startBtn">Start Presentation</button>
-    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
+
+    <footer>
+      Powered by Jet2 Holidays ✈️ | PortAventura World 🎡
+    </footer>
   </div>
 
-  <!-- Plane animation overlay -->
+  <!-- Plane + Banner animation -->
   <div id="planeOverlay">
     <div id="planeAnim">
       <div class="banner">TEAM KB FOR THE WIN</div>
@@ -27,27 +34,24 @@
 
   <script>
     const startBtn = document.getElementById("startBtn");
-    const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
-    const card = document.getElementById("welcomeCard");
+    const planeAnim = document.getElementById("planeAnim");
+    const welcomeScreen = document.getElementById("welcomeScreen");
 
     startBtn.addEventListener("click", () => {
-      // Fade out the welcome card
-      card.classList.add("fadeOut");
+      // Fade out welcome card
+      welcomeScreen.classList.add("fadeOut");
 
-      // Start the plane animation after fade completes
+      // Show plane animation slightly after fade
       setTimeout(() => {
         overlay.style.display = "block";
-        plane.classList.add("fly");
-      }, 1500);
+        planeAnim.classList.add("fly");
+      }, 700);
 
-      // Fade to white near the end
-      setTimeout(() => overlay.classList.add("fadeToWhite"), 10500);
-
-      // Redirect to main game
+      // Redirect to game page after flight
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 12000);
+      }, 10500);
     });
   </script>
 </body>
