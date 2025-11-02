@@ -1,88 +1,85 @@
-/* === Base Style === */
+/* === Global Styling === */
 body {
   margin: 0;
+  padding: 0;
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to bottom right, #d7ecff, #f8f9f4);
-  color: #333;
+  background: linear-gradient(to bottom, #dff1ff, #fff8e1);
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
 }
 
-/* === Main Card === */
-.main-card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  padding: 50px 80px;
+/* === Matching Game Style Card === */
+.game-style-container {
   text-align: center;
+  background: #fff;
+  border: 2px solid #e4002b;
+  border-radius: 20px;
+  padding: 40px 60px;
   max-width: 700px;
-  z-index: 2;
-  position: relative;
-  border: 3px solid #e4002b;
-  transition: opacity 1.2s ease, transform 1.2s ease;
+  margin: 80px auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: opacity 1s ease, transform 1s ease;
 }
 
-.main-card.fadeOut {
+.game-style-container.fadeOut {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
 
-.main-card h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #111;
-}
-
-.main-card h1 span {
+h1 {
   color: #e4002b;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: #444;
+  color: #333;
+  margin: 10px 0;
+  font-size: 1.1rem;
 }
 
 .info {
   color: #555;
-  font-size: 0.95rem;
-  margin: 10px 0 25px 0;
+  margin-top: 10px;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 button {
   background: #e4002b;
-  border: none;
-  padding: 12px 40px;
   color: white;
-  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
   border-radius: 8px;
+  margin-top: 25px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s, transform 0.2s;
 }
+
 button:hover {
-  background: #c00023;
+  background: #c10024;
+  transform: scale(1.05);
 }
 
 footer {
   margin-top: 25px;
-  font-size: 0.85rem;
   color: #666;
+  font-size: 0.9rem;
 }
 
 /* === Plane Animation Overlay === */
 #planeOverlay {
+  display: none;
   position: fixed;
   inset: 0;
-  display: none;
-  pointer-events: none;
-  z-index: 10;
-  background: transparent;
+  background: linear-gradient(to bottom, #dff1ff, #fff8e1);
   overflow: hidden;
+  z-index: 1000;
 }
 
-/* === Plane and Banner === */
+/* Plane and banner layout */
 #planeAnim {
   position: absolute;
   bottom: 45%;
@@ -91,62 +88,54 @@ footer {
   align-items: center;
   gap: 10px;
   left: -900px;
+  will-change: transform;
 }
 
+/* Plane faces right and pulls the banner */
 .planeImage {
-  width: 240px;
+  width: 260px;
   height: auto;
-  transform: scaleX(-1); /* ✅ Plane faces RIGHT */
+  z-index: 2;
+  position: relative;
 }
 
+/* Banner behind plane */
 .banner {
   background: #e4002b;
   color: white;
-  font-weight: 600;
-  font-size: 1.8rem;
+  font-weight: 700;
+  font-size: 2rem;
   padding: 25px 70px;
-  border-radius: 10px 0 0 10px;
+  border-radius: 0 10px 10px 0;
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.25);
-  transform: skew(2deg);
-  margin-right: -25px;
-  animation: bannerWave 1.2s ease-in-out infinite alternate;
-  transform-origin: right center;
+  transform-origin: left center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  margin-right: -20px;
 }
 
-/* === Animation === */
+/* Smooth, stable flight */
 .fly {
-  animation: planeFly 10s ease-in-out forwards;
+  animation: planeFly 10s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
+/* Stable movement with no distortion */
 @keyframes planeFly {
   0% {
-    left: -900px;
+    transform: translateY(50%) translateX(0);
     opacity: 0;
   }
-  10% {
+  5% {
     opacity: 1;
+  }
+  95% {
+    opacity: 1;
+    transform: translateY(50%) translateX(120vw);
   }
   100% {
-    left: 120%;
     opacity: 1;
+    transform: translateY(50%) translateX(130vw);
   }
 }
-
-@keyframes bannerWave {
-  0% { transform: skew(2deg) rotate(0deg); }
-  25% { transform: skew(3deg) rotate(1deg); }
-  50% { transform: skew(2deg) rotate(-1deg); }
-  75% { transform: skew(3deg) rotate(0.5deg); }
-  100% { transform: skew(2deg) rotate(-0.5deg); }
-}
-
-/* === Fade Transition === */
-.fadeToWhite {
-  animation: fadeToWhiteAnim 2s ease forwards;
-}
-
-@keyframes fadeToWhiteAnim {
-  from { background: transparent; }
-  to { background: white; }
-}
-
