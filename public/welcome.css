@@ -1,4 +1,4 @@
-/* === General Page Styling === */
+/* === General Styling === */
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -7,7 +7,6 @@ body {
   overflow: hidden;
 }
 
-/* === Welcome Section === */
 .welcome-container {
   display: flex;
   flex-direction: column;
@@ -59,39 +58,7 @@ footer {
   color: #555;
 }
 
-/* === Info Boxes Row === */
-.info-row {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
-  z-index: 3;
-}
-
-.info-box {
-  background: white;
-  border: 2px solid #e4002b;
-  border-radius: 12px;
-  padding: 15px 25px;
-  width: 250px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.info-box:hover {
-  transform: scale(1.05);
-}
-
-.info-box h2 {
-  color: #e4002b;
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-}
-
-/* === Plane Animation Overlay === */
+/* === Plane Overlay === */
 #planeOverlay {
   position: fixed;
   top: 0;
@@ -100,11 +67,12 @@ footer {
   height: 100%;
   display: none;
   pointer-events: none;
-  z-index: 4; /* Below info boxes */
+  z-index: 5;
   background: transparent;
   overflow: hidden;
 }
 
+/* === Plane and Banner === */
 #planeAnim {
   position: absolute;
   bottom: 50%;
@@ -118,10 +86,10 @@ footer {
 .planeImage {
   width: 220px;
   height: auto;
-  transform: scaleX(1); /* Face right */
+  transform: scaleX(1); /* face right */
 }
 
-/* === Banner Styling === */
+/* === Banner === */
 .banner {
   background: #e4002b;
   color: white;
@@ -136,7 +104,7 @@ footer {
   transform-origin: left center;
 }
 
-/* === Plane Flight Animation === */
+/* === Animation === */
 .fly {
   animation: planeFly 8s ease-in-out forwards;
 }
@@ -158,7 +126,7 @@ footer {
   }
 }
 
-/* === Banner Flutter Effect === */
+/* Banner movement */
 @keyframes bannerWave {
   0% {
     transform: skew(-3deg) rotate(0deg);
@@ -177,7 +145,7 @@ footer {
   }
 }
 
-/* === Fade to White Transition === */
+/* === Fade Transition === */
 .fadeToWhite {
   animation: fadeToWhiteAnim 1.5s ease forwards;
 }
