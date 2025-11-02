@@ -1,100 +1,94 @@
-/* === Global Styling === */
+/* === General Page Styling === */
 body {
   margin: 0;
-  padding: 0;
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to bottom right, #dff0ff, #fff9e6);
+  background: linear-gradient(to bottom right, #dff1ff, #f7f9ef);
+  color: #333;
   overflow: hidden;
-  height: 100vh;
 }
 
 /* === Welcome Section === */
 .welcome-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  background: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  width: 500px;
-  margin: 120px auto;
-  transition: opacity 1.5s ease, transform 1.5s ease;
-  z-index: 20;
+  height: 100vh;
+  gap: 15px;
+  z-index: 2;
   position: relative;
 }
 
-.welcome-container.fadeOut {
-  opacity: 0;
-  transform: translateY(-50px);
-}
-
-/* === Buttons and Text === */
 h1 {
   color: #e4002b;
-  margin-bottom: 10px;
+  font-size: 2.2rem;
+  margin-bottom: 0;
 }
 
 .subtitle {
-  font-size: 1rem;
   color: #333;
-  margin-bottom: 15px;
+  font-size: 1rem;
+  margin-top: 5px;
 }
 
 .info {
-  font-size: 0.95rem;
   color: #444;
-  margin-bottom: 25px;
+  font-size: 0.95rem;
+  max-width: 500px;
 }
 
 button {
   background-color: #e4002b;
-  border: none;
   color: white;
-  padding: 12px 25px;
-  font-size: 1rem;
+  border: none;
+  padding: 12px 30px;
   border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #c70024;
+  background-color: #c00023;
 }
 
 footer {
+  margin-top: 20px;
   font-size: 0.8rem;
-  color: #666;
-  margin-top: 25px;
+  color: #555;
 }
 
-/* === Info Row (Always Visible) === */
+/* === Info Boxes Row === */
 .info-row {
-  position: fixed;
-  bottom: 25px;
+  position: absolute;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 25px;
-  justify-content: center;
-  align-items: center;
-  z-index: 10; /* Above the plane layer */
-  opacity: 1;
+  gap: 20px;
+  z-index: 3;
 }
 
-aside {
+.info-box {
   background: white;
   border: 2px solid #e4002b;
-  border-radius: 15px;
+  border-radius: 12px;
   padding: 15px 25px;
-  width: 280px;
+  width: 250px;
   text-align: center;
-  font-size: 0.95rem;
-  color: #222;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
-aside:hover {
+.info-box:hover {
   transform: scale(1.05);
+}
+
+.info-box h2 {
+  color: #e4002b;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
 }
 
 /* === Plane Animation Overlay === */
@@ -106,7 +100,7 @@ aside:hover {
   height: 100%;
   display: none;
   pointer-events: none;
-  z-index: 5; /* Below info boxes, above background */
+  z-index: 4; /* Below info boxes */
   background: transparent;
   overflow: hidden;
 }
@@ -118,14 +112,16 @@ aside:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  animation: none;
+  left: -600px;
 }
 
 .planeImage {
   width: 220px;
   height: auto;
+  transform: scaleX(1); /* Face right */
 }
 
+/* === Banner Styling === */
 .banner {
   background: #e4002b;
   color: white;
@@ -135,16 +131,19 @@ aside:hover {
   border-radius: 0 10px 10px 0;
   box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.25);
   transform: skew(-3deg);
+  margin-left: -15px;
+  animation: bannerWave 1.2s ease-in-out infinite alternate;
+  transform-origin: left center;
 }
 
 /* === Plane Flight Animation === */
 .fly {
-  animation: planeFly 7s ease-in-out forwards;
+  animation: planeFly 8s ease-in-out forwards;
 }
 
 @keyframes planeFly {
   0% {
-    left: -50%;
+    left: -700px;
     opacity: 0;
   }
   10% {
@@ -154,8 +153,27 @@ aside:hover {
     transform: translateY(50%) rotate(0deg);
   }
   100% {
-    left: 110%;
+    left: 120%;
     opacity: 1;
+  }
+}
+
+/* === Banner Flutter Effect === */
+@keyframes bannerWave {
+  0% {
+    transform: skew(-3deg) rotate(0deg);
+  }
+  25% {
+    transform: skew(-2deg) rotate(1deg);
+  }
+  50% {
+    transform: skew(-4deg) rotate(-1deg);
+  }
+  75% {
+    transform: skew(-3deg) rotate(0.5deg);
+  }
+  100% {
+    transform: skew(-3deg) rotate(-0.5deg);
   }
 }
 
