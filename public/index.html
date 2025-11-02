@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="welcome.css" />
 </head>
 <body>
-  <!-- === Welcome Container === -->
   <div class="welcome-container">
     <h1>🎢 Welcome to Race to PortAventura!</h1>
     <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
@@ -18,22 +17,7 @@
     <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
-  <!-- === Info Boxes (Stay Visible) === -->
-  <div class="info-row">
-    <aside id="factBox">
-      <p id="factText">Loading PortAventura facts...</p>
-    </aside>
-
-    <aside id="airportBox">
-      <p id="airportFact">Loading Newcastle Airport facts...</p>
-    </aside>
-
-    <aside id="reusBox">
-      <p id="reusFact">Loading Reus Airport facts...</p>
-    </aside>
-  </div>
-
-  <!-- === Plane Animation Overlay === -->
+  <!-- Plane animation overlay -->
   <div id="planeOverlay">
     <div id="planeAnim">
       <img src="plane.png" alt="Plane" class="planeImage" />
@@ -41,70 +25,23 @@
     </div>
   </div>
 
-  <!-- === Animation + Fact Script === -->
   <script>
     const startBtn = document.getElementById("startBtn");
     const plane = document.getElementById("planeAnim");
     const overlay = document.getElementById("planeOverlay");
 
     startBtn.addEventListener("click", () => {
-      // Fade out the welcome box only
-      document.querySelector(".welcome-container").classList.add("fadeOut");
-
-      // Show overlay and start plane animation
       overlay.style.display = "block";
       setTimeout(() => plane.classList.add("fly"), 100);
 
-      // Keep info boxes visible — no fade
-      // Only fade out the overlay at the end for a clean transition
-      setTimeout(() => {
-        overlay.classList.add("fadeToWhite");
-      }, 7000);
+      // Fade out after the plane finishes
+      setTimeout(() => overlay.classList.add("fadeToWhite"), 8000);
 
       // Redirect to game page
       setTimeout(() => {
         window.location.href = "game.html";
-      }, 8500);
+      }, 9500);
     });
-
-    // === Facts Arrays ===
-    const portaventuraFacts = [
-      "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
-      "🏨 Hotel guests get **free park access** during their stay.",
-      "🚆 Only 10 minutes from **Salou** and 1 hour from **Barcelona**.",
-      "🎟️ Includes **Ferrari Land** and **Caribe Aquatic Park**.",
-      "🍴 Over **50 restaurants** and snack spots in the resort.",
-      "🌙 Night shows, fireworks, and character parades every evening."
-    ];
-
-    const airportFacts = [
-      "🛫 Newcastle Airport serves **over 5 million passengers** per year.",
-      "🍔 Great dining with **Greggs, Burger King, Cabin Bar**, and more.",
-      "💺 The airport provides **special assistance** and priority lanes.",
-      "🛍️ Duty-free includes **World Duty Free** and **JD Sports**.",
-      "🚖 Around 15 minutes from **Newcastle city centre**.",
-      "🧳 Offers lounges, car rentals, and on-site parking."
-    ];
-
-    const reusFacts = [
-      "🛬 Airlines like **Jet2, Ryanair, and TUI** operate direct seasonal flights.",
-      "🌍 Handles **over 1 million passengers** annually.",
-      "🧳 Features **wheelchair access**, accessible toilets, and assistance staff.",
-      "🚗 Car hire available with **Avis, Hertz, Europcar, and Goldcar**.",
-      "🚌 Shuttle buses to **Salou, Tarragona, and PortAventura** every 30 mins.",
-      "☕ Cafés, duty-free, and family facilities available."
-    ];
-
-    // === Rotate Facts Every 10 Seconds ===
-    function rotateFacts() {
-      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-      document.getElementById("factText").innerHTML = pick(portaventuraFacts);
-      document.getElementById("airportFact").innerHTML = pick(airportFacts);
-      document.getElementById("reusFact").innerHTML = pick(reusFacts);
-    }
-
-    setInterval(rotateFacts, 10000);
-    rotateFacts();
   </script>
 </body>
 </html>
