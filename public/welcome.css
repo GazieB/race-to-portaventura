@@ -6,9 +6,12 @@ body {
   background: linear-gradient(to bottom, #dff1ff, #fff8e1);
   overflow: hidden;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* === Matching Game Style Box === */
+/* === Matching Game Style Box (Centered) === */
 .game-style-container {
   text-align: center;
   background: #fff;
@@ -16,9 +19,11 @@ body {
   border-radius: 20px;
   padding: 40px 60px;
   max-width: 700px;
-  margin: 80px auto;
+  width: 90%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   transition: opacity 1s ease, transform 1s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .game-style-container.fadeOut {
@@ -126,7 +131,7 @@ footer {
   animation: planeFly 11s cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
 }
 
-/* Extended smooth flight — now goes completely off screen */
+/* Extended smooth flight — full exit */
 @keyframes planeFly {
   0% {
     transform: translateY(50%) translateX(0);
