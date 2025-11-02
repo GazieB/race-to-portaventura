@@ -1,54 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Race from Newcastle Airport to PortAventura</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Race to PortAventura</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Fade-in transition -->
+  <style>
+    body {
+      opacity: 0;
+      transition: opacity 2.5s ease-in-out;
+    }
+    body.fadeIn {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-  <!-- INFO BOXES -->
-  <aside id="factBox">
-    <p id="factText">Loading PortAventura facts...</p>
-  </aside>
-
-  <aside id="airportBox">
-    <p id="airportFact">Loading Newcastle Airport facts...</p>
-  </aside>
-
-  <aside id="reusBox">
-    <p id="reusFact">Loading Reus Airport facts...</p>
-  </aside>
-
-  <!-- MAIN GAME -->
-  <main class="container">
+  <div class="container">
     <header>
-      <h1>✈️ Race from Newcastle Airport to PortAventura 📈</h1>
-      <p>Spam the <strong>Space</strong> bar to fly faster! Up to 10 players.</p>
+      <h1>Race to PortAventura 🏁</h1>
+      <p>Welcome to the ultimate Jet2 Holidays race experience!</p>
     </header>
 
-    <section class="controls">
-      <input id="name" placeholder="Your name" maxlength="20" />
+    <div class="controls">
+      <input type="text" id="name" placeholder="Enter your name" />
       <button id="joinBtn">Join</button>
-      <button id="startBtn" disabled>Start Race</button>
-      <button id="resetBtn" disabled>Reset</button>
+      <button id="startBtn">Start Race</button>
+      <button id="resetBtn">Reset</button>
       <span id="countdown"></span>
-    </section>
+    </div>
 
-    <section class="trackArea">
-      <div class="startLabel">Newcastle Airport 🛫</div>
-      <div class="finishLabel">PortAventura 🎢</div>
-      <div id="tracks"></div>
-    </section>
+    <div id="tracks" class="trackArea"></div>
 
-    <section class="sidebar">
+    <aside id="factBox">
+      <p id="factText">Loading PortAventura facts...</p>
+    </aside>
+
+    <aside id="airportBox">
+      <p id="airportFact">Loading Newcastle Airport facts...</p>
+    </aside>
+
+    <aside id="reusBox">
+      <p id="reusFact">Loading Reus Airport facts...</p>
+    </aside>
+
+    <div class="sidebar">
       <h3>Leaderboard</h3>
-      <ol id="leaderboard"></ol>
-      <p class="hint">Tip: Keep a steady rhythm. Don’t hold Space — tap it!</p>
-    </section>
-  </main>
+      <ul id="leaderboard"></ul>
+    </div>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
+  <script>
+    // Fade in the game page when it loads
+    window.addEventListener("load", () => {
+      document.body.classList.add("fadeIn");
+    });
+  </script>
 </body>
 </html>
