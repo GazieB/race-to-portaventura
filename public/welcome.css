@@ -22,6 +22,12 @@ body {
   z-index: 2;
   position: relative;
   border: 3px solid #e4002b;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.main-card.fadeOut {
+  opacity: 0;
+  transform: scale(0.9);
 }
 
 .main-card h1 {
@@ -90,7 +96,7 @@ footer {
 .planeImage {
   width: 240px;
   height: auto;
-  transform: scaleX(1); /* ✅ Plane faces RIGHT now */
+  transform: scaleX(1); /* ✅ Plane faces RIGHT */
 }
 
 .banner {
@@ -143,4 +149,3 @@ footer {
   from { background: transparent; }
   to { background: white; }
 }
-
