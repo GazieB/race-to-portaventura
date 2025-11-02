@@ -60,14 +60,14 @@ socket.on("countdown", ({ ms }) => {
       setTimeout(() => (countdown.textContent = ""), 1000);
     }
   }, 1000);
-  showCommentary(`Race starting in ${seconds} seconds...`);
+  showCommentary(`Race starting in ${seconds} seconds...`, "gold");
 });
 
 // === Cheat Alerts ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
-  showCommentary(`🚨 ${message}`);
+  showCommentary(`🚨 ${message}`, "red");
 });
 
 // === Game State Updates ===
@@ -134,7 +134,7 @@ socket.on("state", (state) => {
 
   if (state.finishedOrder && state.finishedOrder.length > 0) {
     const winner = state.finishedOrder[0].name;
-    showCommentary(`🎉 ${winner} has landed first at PortAventura!`);
+    showCommentary(`🏆 ${winner} has landed first at PortAventura!`, "gold");
   }
 });
 
@@ -184,39 +184,64 @@ window.addEventListener("DOMContentLoaded", () => {
   setInterval(rotateFacts, 10000);
 });
 
-// === 🎙️ Commentary System ===
+// === 🎙️ Broadcast-Style Commentary System ===
 const commentaryBox = document.getElementById("commentaryBox");
 
-function showCommentary(message, duration = 4000) {
+function showCommentary(message, mood = "blue", duration = 4500) {
   if (!commentaryBox) return;
-  commentaryBox.textContent = "🎙️ " + message;
+
+  commentaryBox.textContent = `🎤 Gaz Reports: ${message}`;
   commentaryBox.classList.add("show");
+
+  // Mood-based color styling
+  if (mood === "red") commentaryBox.style.borderColor = "#d32f2f";
+  else if (mood === "gold") commentaryBox.style.borderColor = "#ffb400";
+  else commentaryBox.style.borderColor = "#007bff";
+
+  commentaryBox.style.color = mood === "red" ? "#d32f2f" : mood === "gold" ? "#b8860b" : "#0044cc";
+
   setTimeout(() => commentaryBox.classList.remove("show"), duration);
 }
 
 // === Dynamic live commentary ===
 function startLiveCommentary(state) {
-  const comments = [
+  const neutralComments = [
     "💨 The planes are off to a flying start!",
     "🔥 Things are heating up mid-race!",
     "🎢 It’s neck and neck near Barcelona!",
-    "✈️ Look at them go — this is intense!",
     "🌟 The crowd at PortAventura is cheering!",
     "🚀 Someone just gained serious altitude!",
-    "🎯 A perfect take-off — what skill!",
-    "👏 What a close race — anyone can win!"
+    "🎯 Smooth flying — what control!",
+    "👏 It’s still anyone’s race!",
   ];
 
   commentaryInterval = setInterval(() => {
     if (!raceInProgress) return;
-    const randomMsg = comments[Math.floor(Math.random() * comments.length)];
-    showCommentary(randomMsg);
-  }, 7000); // Every 7 seconds
+
+    // Random general comment
+    const randomMsg = neutralComments[Math.floor(Math.random() * neutralComments.length)];
+    showCommentary(randomMsg, "blue");
+
+    // Occasionally comment on the last player
+    if (state.players && state.players.length > 1 && Math.random() < 0.4) {
+      const sorted = [...state.players].sort((a, b) => b.distance - a.distance);
+      const last = sorted[sorted.length - 1];
+      if (last && !last.finished) {
+        const cheekyComments = [
+          `😴 Looks like ${last.name} can’t be bothered today!`,
+          `🐢 ${last.name} might still be on the runway!`,
+          `☕ ${last.name} stopped for a coffee break!`,
+          `🛬 ${last.name} taking the scenic route again?`
+        ];
+        showCommentary(cheekyComments[Math.floor(Math.random() * cheekyComments.length)], "blue");
+      }
+    }
+  }, 7000);
 }
 
 // Reset commentary on race reset
 socket.on("reset", () => {
-  showCommentary("🔁 The race has been reset — get ready for another round!");
+  showCommentary("🔁 The race has been reset — get ready for another round!", "red");
   clearInterval(commentaryInterval);
   commentaryInterval = null;
 });
