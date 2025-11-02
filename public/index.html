@@ -9,55 +9,43 @@
 <body>
   <div class="welcome-container">
     <h1>🎢 Welcome to Race to PortAventura!</h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>GazieB</strong></p>
+    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
     <p class="info">
       Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
     </p>
     <button id="startBtn">Start Presentation</button>
-    <footer>Powered by assisted travel for assisted travel ✈️ | TeamKB for the win 🏆</footer>
+    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
   </div>
 
   <!-- Plane animation overlay -->
   <div id="planeOverlay">
-  <div class="planeWrapper">
-    <img src="plane.png" alt="Plane" class="planeImage">
-    <div class="banner">TEAM KB FOR THE WIN</div>
+    <div id="planeAnim" class="planeWrapper">
+      <img src="plane.png" alt="Plane" class="planeImage">
+      <div class="banner">TEAM KB FOR THE WIN</div>
+    </div>
   </div>
-</div>
-
 
   <script>
-  const startBtn = document.getElementById("startBtn");
-  const plane = document.getElementById("planeAnim");
-  const overlay = document.getElementById("planeOverlay");
-  const container = document.querySelector(".welcome-container");
+    const startBtn = document.getElementById("startBtn");
+    const overlay = document.getElementById("planeOverlay");
+    const plane = document.getElementById("planeAnim");
+    const container = document.querySelector(".welcome-container");
 
-  startBtn.addEventListener("click", () => {
-    // Disable the button immediately to prevent double-click
-    startBtn.disabled = true;
+    startBtn.addEventListener("click", () => {
+      startBtn.disabled = true;
+      container.classList.add("fadeOut");
+      overlay.style.display = "block";
 
-    // Fade out the welcome content
-    container.classList.add("fadeOut");
+      setTimeout(() => plane.classList.add("fly"), 100);
 
-    // Start plane animation
-    overlay.style.display = "block";
-    setTimeout(() => plane.classList.add("fly"), 100);
+      setTimeout(() => {
+        overlay.classList.add("fadeToWhite");
+      }, 3500);
 
-    // Fade entire screen to white as plane finishes
-    setTimeout(() => {
-      overlay.classList.add("fadeToWhite");
-    }, 3500);
-
-    // Redirect after the fade is complete
-    setTimeout(() => {
-      window.location.href = "game.html";
-    }, 4500);
-  });
-</script>
-
+      setTimeout(() => {
+        window.location.href = "game.html";
+      }, 4500);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
