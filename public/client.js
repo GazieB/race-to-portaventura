@@ -1,6 +1,3 @@
-// =============================
-// Race to PortAventura - client.js (Dynamic Commentary Edition)
-// =============================
 console.log("✅ client.js loaded");
 
 const socket = io();
@@ -32,7 +29,6 @@ function showCommentary(text, color = "white") {
   setTimeout(() => commentaryBox.classList.remove("show"), 4500);
 }
 
-// === Join / Start / Reset ===
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim() || "Player";
   socket.emit("join", name);
@@ -79,13 +75,11 @@ socket.on("countdown", ({ ms }) => {
   }, 1000);
 });
 
-// === Race Started ===
 socket.on("raceStarted", () => {
   showCommentary("🏁 The race has started! Engines are roaring to life!", "gold");
   startLiveCommentary();
 });
 
-// === Cheat Alert ===
 socket.on("cheatAlert", ({ name, message }) => {
   buzzer.currentTime = 0;
   buzzer.play().catch(() => {});
@@ -111,7 +105,6 @@ socket.on("cheatAlert", ({ name, message }) => {
   setTimeout(() => alert.remove(), 3000);
 });
 
-// === Update Game State ===
 socket.on("state", (state) => {
   latestState = state;
   raceInProgress = state.inProgress;
@@ -120,7 +113,6 @@ socket.on("state", (state) => {
 
   const sortedPlayers = [...state.players].sort((a, b) => b.distance - a.distance);
 
-  // Build Track
   state.players.forEach((p) => {
     const lane = document.createElement("div");
     lane.className = "lane";
@@ -147,7 +139,6 @@ socket.on("state", (state) => {
     tracks.appendChild(lane);
   });
 
-  // Build Leaderboard
   sortedPlayers.forEach((p, idx) => {
     const li = document.createElement("li");
     const pct = Math.min(100, Math.round((p.distance / state.finishDistance) * 100));
@@ -178,7 +169,6 @@ socket.on("state", (state) => {
   }
 });
 
-// === Dynamic Live Commentary ===
 function startLiveCommentary() {
   const neutralComments = [
     "💨 The planes are off to a flying start!",
@@ -227,7 +217,6 @@ function startLiveCommentary() {
       showCommentary(neutralComments[Math.floor(Math.random() * neutralComments.length)], "blue");
     }
 
-    // 🐢 Cheeky comments for last place
     else if (last && !last.finished) {
       const cheekyComments = [
         `😴 Looks like ${last.name} can’t be bothered today!`,
@@ -240,7 +229,6 @@ function startLiveCommentary() {
   }, 7000);
 }
 
-// === Facts Rotation ===
 const portaventuraFacts = [
   "🎢 PortAventura World has **6 themed areas** including China and the Far West.",
   "🏨 Hotel guests get **free park access** during their stay.",
@@ -252,6 +240,7 @@ const portaventuraFacts = [
 
 const airportFacts = [
   "🛫 Newcastle Airport serves **over 5 million passengers** per year.",
+  "🛬 Newcastle Airport has 3 Lounges",
   "🍔 Great dining with **Greggs, Burger King, Cabin Bar**, and more.",
   "💺 The airport provides **special assistance** and priority lanes.",
   "🛍️ Duty-free includes **World Duty Free** and **JD Sports**.",
@@ -285,3 +274,4 @@ window.addEventListener("DOMContentLoaded", () => {
   rotateFacts();
   setInterval(rotateFacts, 10000);
 });
+
