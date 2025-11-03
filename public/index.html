@@ -6,31 +6,34 @@
   <title>Race to PortAventura - Welcome</title>
   <link rel="stylesheet" href="welcome.css" />
 </head>
+  
 <body>
   <div class="game-style-container" id="welcomeBox">
     <h1>🎢 Welcome to Race to PortAventura!</h1>
-    <p class="subtitle">A live multiplayer experience created by <strong>Gaz</strong></p>
+    <p class="subtitle">A live multiplayer experience created by <strong>Gareth Bennett</strong></p>
     <p class="info">
       Get ready to race from Newcastle Airport all the way to PortAventura World! ✈️🌍
     </p>
     <button id="startBtn">Start Presentation</button>
-    <footer>Powered by Jet2 Holidays ✈️ | PortAventura World 🎡</footer>
+    <footer>✈️ Desgined By Assisted Travel For Assisted Travel Jet2 Holidays ✈️</footer>
   </div>
-
-  <!-- Plane Animation Overlay -->
+  
   <div id="planeOverlay">
     <div class="planeRow topPlane">
-      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <div class="banner">Book From £60 Per Person</div>
       <img src="plane.png" alt="Plane" class="planeImage">
     </div>
+    
     <div class="planeRow upperMidPlane">
-      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <div class="banner">Flights From 13 Uk Airports!</div>
       <img src="plane.png" alt="Plane" class="planeImage">
     </div>
+    
     <div class="planeRow lowerMidPlane">
-      <div class="banner">TEAM KB FOR THE WIN!</div>
+      <div class="banner">Aveage Flight Time 2hr 30 Minutes!</div>
       <img src="plane.png" alt="Plane" class="planeImage">
     </div>
+    
     <div class="planeRow bottomPlane">
       <div class="banner">TEAM KB FOR THE WIN!</div>
       <img src="plane.png" alt="Plane" class="planeImage">
@@ -43,10 +46,7 @@
     const welcomeBox = document.getElementById("welcomeBox");
 
     startBtn.addEventListener("click", () => {
-      // Fade out welcome box
       welcomeBox.classList.add("fadeOut");
-
-      // Start plane overlay
       overlay.style.display = "block";
 
       // Start animation for all planes
@@ -55,7 +55,6 @@
         planes.forEach((plane) => plane.classList.add("fly"));
       }, 200);
 
-      // Redirect to the game after flight finishes
       setTimeout(() => {
         window.location.href = "game.html";
       }, 11500); // after 11.5s (matches animation length)
@@ -63,3 +62,4 @@
   </script>
 </body>
 </html>
+
