@@ -26,7 +26,7 @@ buzzer.volume = 0.6;
 // === Utility: Show commentary messages ===
 function showCommentary(text, color = "white") {
   if (!commentaryBox) return;
-  commentaryBox.innerHTML = `🎤 ${text}`;
+  commentaryBox.innerHTML = `🎙️ Gaz is reporting — ${text}`;
   commentaryBox.style.borderColor = color === "gold" ? "#ffd700" : "#007bff";
   commentaryBox.classList.add("show");
   setTimeout(() => commentaryBox.classList.remove("show"), 4500);
@@ -77,6 +77,12 @@ socket.on("countdown", ({ ms }) => {
       setTimeout(() => (countdown.textContent = ""), 1000);
     }
   }, 1000);
+});
+
+// === Race Started ===
+socket.on("raceStarted", () => {
+  showCommentary("🏁 The race has started! Engines are roaring to life!", "gold");
+  startLiveCommentary();
 });
 
 // === Cheat Alert ===
@@ -278,5 +284,4 @@ function rotateFacts() {
 window.addEventListener("DOMContentLoaded", () => {
   rotateFacts();
   setInterval(rotateFacts, 10000);
-  startLiveCommentary();
 });
