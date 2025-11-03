@@ -13,9 +13,8 @@ const MAX_PLAYERS = 10;
 const FINISH_DISTANCE = 1000;
 const START_COUNTDOWN_MS = 3000;
 
-
 const lobby = {
-  players: new Map(), 
+  players: new Map(),
   inProgress: false,
   startedAt: null,
   finishedOrder: [],
@@ -57,7 +56,6 @@ function handleCheating(player) {
 
   const message = `Come on ${player.name}, stop cheating — it's only a game!`;
 
-  // Broadcast message to everyone
   io.emit("cheatAlert", { name: player.name, message });
 
   player.frozen = true;
@@ -104,6 +102,11 @@ io.on("connection", (socket) => {
     setTimeout(() => {
       lobby.inProgress = true;
       lobby.startedAt = Date.now();
+
+      // 🎙️ Tell clients the race has started (for commentary)
+      io.emit("raceStarted");
+
+      // Send initial state to all players
       io.emit("state", getLobbyState());
       console.log("🏁 Race started!");
     }, START_COUNTDOWN_MS);
@@ -114,7 +117,7 @@ io.on("connection", (socket) => {
     if (!player || !lobby.inProgress || player.finished || player.frozen) return;
 
     player.distance += 2;
-    
+
     if (player.distance >= FINISH_DISTANCE && !player.finished) {
       player.finished = true;
       lobby.finishedOrder.push({ id: socket.id, name: player.name });
@@ -142,7 +145,6 @@ io.on("connection", (socket) => {
 
   socket.on("reset", resetRace);
 
- 
   socket.on("disconnect", () => {
     const player = lobby.players.get(socket.id);
     if (player) {
@@ -153,9 +155,8 @@ io.on("connection", (socket) => {
     }
   });
 });
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
