@@ -1,4 +1,4 @@
-// === IMPORTS ===
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -10,16 +10,15 @@ const io = new Server(server, { cors: { origin: "*" } });
 app.use(express.static("public"));
 console.log("📦 Serving static files from:", __dirname + "/public");
 
-// === CONSTANTS ===
 const MAX_PLAYERS = 10;
 const FINISH_DISTANCE = 1000;
 const START_COUNTDOWN_MS = 3000;
 
-// === GLOBAL BROADCAST CONTROLS ===
+
 let lastBroadcast = 0;
 const BROADCAST_INTERVAL = 100; // send updates 10x per second
 
-// === LOBBY STATE ===
+
 const lobby = {
   players: new Map(),
   inProgress: false,
@@ -27,7 +26,7 @@ const lobby = {
   finishedOrder: [],
 };
 
-// === UTILITIES ===
+
 function getLobbyState() {
   return {
     inProgress: lobby.inProgress,
@@ -74,7 +73,7 @@ function handleCheating(player) {
   }, 2000);
 }
 
-// === SOCKET EVENTS ===
+
 io.on("connection", (socket) => {
   console.log("📶 New connection:", socket.id);
 
@@ -117,21 +116,21 @@ io.on("connection", (socket) => {
     }, START_COUNTDOWN_MS);
   });
 
-  // --- Player Tap (movement + throttle) ---
+
   socket.on("tap", () => {
     const player = lobby.players.get(socket.id);
     if (!player || !lobby.inProgress || player.finished || player.frozen) return;
 
     const now = Date.now();
 
-    // 🧠 NEW: Anti-spam throttle (ignore taps <80ms apart)
+  
     if (player.lastTap && now - player.lastTap < 80) return;
     player.lastTap = now;
 
-    // ✈️ Move player forward
+ 
     player.distance += 2;
 
-    // Check finish
+ 
     if (player.distance >= FINISH_DISTANCE && !player.finished) {
       player.finished = true;
       lobby.finishedOrder.push({ id: socket.id, name: player.name });
@@ -150,7 +149,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // --- Cheat Detection (existing logic) ---
+ 
   socket.on("cheatDetected", () => {
     const player = lobby.players.get(socket.id);
     console.log(`📩 cheatDetected received from ${player?.name || "unknown player"}`);
@@ -162,10 +161,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  // --- Reset Race ---
+
   socket.on("reset", resetRace);
 
-  // --- Disconnect ---
+ 
   socket.on("disconnect", () => {
     const player = lobby.players.get(socket.id);
     if (player) {
@@ -177,9 +176,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// === STABILITY & SAFETY ===
 
-// Prevent crash on uncaught errors
+
+
 process.on("uncaughtException", (err) => {
   console.error("🔥 Uncaught Exception:", err);
 });
@@ -188,7 +187,7 @@ process.on("unhandledRejection", (reason, promise) => {
   console.error("⚠️ Unhandled Rejection at:", promise, "reason:", reason);
 });
 
-// Graceful shutdown for Render restarts
+
 process.on("SIGTERM", () => {
   console.log("🛑 Graceful shutdown...");
   server.close(() => {
@@ -197,8 +196,9 @@ process.on("SIGTERM", () => {
   });
 });
 
-// === START SERVER ===
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
